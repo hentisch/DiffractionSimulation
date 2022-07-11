@@ -16,5 +16,3 @@ def simple_cubic(side_length):
                 point_counter += 1
 
     return points
-
-print(sorted(simple_cubic(1), key=lambda x: x[-1]))
