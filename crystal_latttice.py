@@ -21,4 +21,5 @@ class CrystalLattice:
                     current_lattice_index += 1
         
     def get_raw_points(self):
+        """ Returns a simple matrix of points representing each atom in the larger lattice """
         return self.all_points.reshape((self.all_points.shape[1]*self.all_points.shape[0], 3))
