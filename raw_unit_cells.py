@@ -2,8 +2,8 @@ import numpy as np
 
 from utils import midpoint_formula
 
-""" This file contains several python functions to return a set of coordinates represnting a single form of unit cell
-for use in a crystal lattice. This is returned as a 2d numpy matrix, with each element containg the (x, y, z) points 
+""" This file contains several python functions to return a set of coordinates representing a single form of unit cell
+for use in a crystal lattice. This is returned as a 2d numpy matrix, with each element contains the (x, y, z) points 
 of each particular atom """
 
 def simple_cubic(side_length:int):
@@ -28,7 +28,7 @@ def body_centered_cubic(side_length:int):
     return points
 
 def get_xy_tuple(coordinates:np.array):
-    """ Returns a tuple of the x and y corrdinates of the passed 3d point """
+    """ Returns a tuple of the x and y coordinates of the passed 3d point """
     return (coordinates[0], coordinates[1])
 
 def face_centered_cubic(side_length:int):
