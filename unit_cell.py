@@ -45,7 +45,7 @@ class UnitCell:
         if points == "all":
             shifted_points = np.copy(self.all_points)
         elif points == "edge":
-            shifted_points = np.copy(self.edge_points_)
+            shifted_points = np.copy(self.edge_points)
         
         shift_points(shifted_points, x_shift, y_shift, z_shift)
         return shifted_points
