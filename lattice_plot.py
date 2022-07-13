@@ -26,6 +26,10 @@ def num_differences(arr_a:np.array, arr_b:np.array):
 
 
 def plot_box(corner_points:np.array, color:tuple):
+    """TODO, this method is really poorly optimized, 
+    https://docs.enthought.com/mayavi/mayavi/auto/example_plotting_many_lines.html,
+    would probably be the way to do this"""
+    
     lines = set()
     for point in corner_points:
         for other_point in corner_points:
