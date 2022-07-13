@@ -23,3 +23,9 @@ def flatten_matrix(matrix:list):
         for element in row:
             items.append(element)
     return items
+
+def rgb_to_mayavi(r, g, b):
+    """ Convertes from a standard r,g,b color with each 
+    color a single byte to an rgb color with each color a 
+    float between 0 and 1 """
+    return r/255, g/255, b/255
