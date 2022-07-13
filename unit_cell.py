@@ -33,7 +33,7 @@ class UnitCell:
         passed function, with the given side length. """
         return UnitCell(unit_cell_function(side_length), side_length, edge_points=edge_points)
 
-    """ The following functions will return a UnitCell object of their repsective categories,
+    """ The following functions will return a UnitCell object of their respective categories,
     just for convenience. """
 
     def get_shifted_points(self, x_shift, y_shift, z_shift, size="unit_cells", points="all"):
