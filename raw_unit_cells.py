@@ -49,7 +49,7 @@ def face_centered_cubic(side_length:int):
         points[points_arr_ind] = np.array(midpoint_formula(get_xy_tuple(point), get_xy_tuple(square_points[(i + 1) % len(square_points)])) + (z_midpoint,))
         points_arr_ind += 1
     
-    points[13] = (side_length/2, side_length/2, 0)
-    points[14] = (side_length/2, side_length/2, 1)
+    points[12] = (side_length/2, side_length/2, 0)
+    points[13] = (side_length/2, side_length/2, 1)
     
     return points
