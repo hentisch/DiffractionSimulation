@@ -39,5 +39,6 @@ def plot_box(corner_points:np.array, color:tuple):
                     line = np.array([point, other_point])
                     mlab.plot3d(line[:,0], line[:,1], line[:,2], tube_radius=None, color=rgb_to_mayavi(*color))
 
-lattice = CrystalLattice((2, 2, 3), UnitCell.body_centered_cubic(1))
-plot_lattice(lattice)
+if __name__ == "__main__":
+    lattice = CrystalLattice((1, 5, 1), UnitCell.face_centered_cubic(1))
+    plot_lattice(lattice)
