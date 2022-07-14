@@ -7,6 +7,8 @@ from mayavi import mlab
 from utils import rgb_to_mayavi
 
 def plot_lattice(lattice:CrystalLattice):
+    """ This function will create and show a Mayavi 3d
+    plot of the passed CrystalLattice object """
     points = lattice.get_raw_points()
     plot = mlab.points3d(points[:,0], points[:,1], points[:,2], scale_factor=0.1, resolution=20)
     points = np.array([[1, 2, 3], [1, 4, 3]]) 
@@ -17,7 +19,9 @@ def plot_lattice(lattice:CrystalLattice):
 
 
 def num_differences(arr_a:np.array, arr_b:np.array):
-    assert arr_a.shape == arr_b.shape
+    """ This function will return the number of values
+    which are different between two equally sized arrays """
+    assert arr_a.shape == arr_b.shape, "Both arrays need to be the same shape"
     one_difference = 0
     for i, e in enumerate(arr_a):
         if e != arr_b[i]:
@@ -29,7 +33,7 @@ def plot_box(corner_points:np.array, color:tuple):
     """TODO, this method is really poorly optimized, 
     https://docs.enthought.com/mayavi/mayavi/auto/example_plotting_many_lines.html,
     would probably be the way to do this"""
-    
+
     lines = set()
     for point in corner_points:
         for other_point in corner_points:
