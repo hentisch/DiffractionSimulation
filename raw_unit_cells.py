@@ -7,6 +7,8 @@ for use in a crystal lattice. This is returned as a 2d numpy matrix, with each e
 of each particular atom """
 
 def simple_cubic(side_length:int):
+    """ This method will return the points (with their origin at 0,0) that make up
+    a simple cubic unit cell"""
     points = np.zeros((8, 3))
 
     point_counter = 0
@@ -19,6 +21,8 @@ def simple_cubic(side_length:int):
     return points
 
 def body_centered_cubic(side_length:int):
+    """ This method will return the points (with their origin at 0,0) that make up
+        a simple cubic unit cell"""
     points = np.zeros((9, 3))
 
     points[:8] = simple_cubic(side_length)
@@ -32,6 +36,9 @@ def get_xy_tuple(coordinates:np.array):
     return (coordinates[0], coordinates[1])
 
 def face_centered_cubic(side_length:int):
+    """ This method will return the points (with their origin at 0,0) that make up
+    a simple cubic unit cell"""
+
     points = np.zeros((14, 3))
 
     points[:8] = simple_cubic(side_length)
