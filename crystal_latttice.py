@@ -6,6 +6,9 @@ from unit_cell import UnitCell
 class CrystalLattice:
     
     def __init__(self, shape:tuple[int, int, int], unit_cell:UnitCell) -> None:
+        """ Constructs a CrystalLattice object composed of the passed unit
+        cell and shaped in the form of the passed shape tuple """
+
         self.all_points = np.zeros((np.prod(shape), unit_cell.num_points, 3))
         self.edge_points = np.zeros((np.prod(shape), unit_cell.num_edge_points, 3))
 
