@@ -71,13 +71,10 @@ def convert(unit_a:float, unit_a_type:str, unit_b_type:str):
         "time_period": (freq_from_time_period, time_period_from_freq),
         "photon_energy": (freq_from_photon_energy, photon_energy_from_freq),
         "wavelength": (freq_from_wavelength, wavelength_from_freq),
-        "wavenumber": (freq_from_wavenumber, wavenumber_from_freq)
+        "wavenumber": (freq_from_wavenumber, wavenumber_from_freq),
+        "frequency": (lambda x: x, lambda x: x)
     }
 
     frequency = functions[unit_a_type][0](unit_a)
 
     return functions[unit_b_type][1](frequency)
-
-if __name__ == "__main__":
-    value = convert(1.3, "wavelength", "wavenumber")
-    print(value)
