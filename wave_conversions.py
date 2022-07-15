@@ -38,9 +38,8 @@ def freq_from_wavenumber(wavenumber:float):
     Units: Cycles/Meter -> Hertz
     """
 
-    wavelength = 2/wavelength
+    wavelength = 2/wavenumber
     return freq_from_wavelength(wavelength)
-
 
 
 def angular_frequency_from_freq(frequency:float):
