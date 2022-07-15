@@ -1,4 +1,5 @@
 from scipy import constants
+import numpy as np
 
 def freq_from_angular_frequency(angular_frequency:float):
     """ This function returns the normal frequency of a wave
@@ -6,7 +7,25 @@ def freq_from_angular_frequency(angular_frequency:float):
     
     Units: Radians/Second -> Hertz"""
 
-    return 2/angular_frequency
+    return angular_frequency/2*np.pi
+
+def freq_from_wavenumber(wavenumber:float):
+    """ This function returns the linear frequency 
+    of a wave from the wave's angular wavenumber
+    
+    Units: Cycles/Meter -> Hertz
+    """
+
+    wavelength = 2*np.pi/wavenumber
+    return freq_from_wavelength(wavelength)
+
+def freq_from_wavelength(wavelength:float):
+    """ This function returns the linear frequency of a wave
+    from it's linear wavelength. 
+    
+    Units: Meters -> Hertz """
+
+    return constants.speed_of_light / wavelength
 
 def freq_from_time_period(time_period:float):
     """ This function returns the linear frequency 
@@ -23,27 +42,9 @@ def freq_from_photon_energy(photon_energy:float):
 
     return constants.Planck/photon_energy
 
-def freq_from_wavelength(wavelength:float):
-    """ This function returns the linear frequency of a wave
-    from it's linear wavelength. 
-    
-    Units: Meters -> Hertz """
-
-    return constants.speed_of_light / wavelength
-
-def freq_from_wavenumber(wavenumber:float):
-    """ This function returns the linear frequency 
-    of a wave from the wave's angular wavenumber
-    
-    Units: Cycles/Meter -> Hertz
-    """
-
-    wavelength = 2/wavenumber
-    return freq_from_wavelength(wavelength)
-
 
 def angular_frequency_from_freq(frequency:float):
-    return 2*frequency
+    return 2*np.pi*frequency
 
 def time_period_from_freq(frequency:float):
     return 1/frequency
@@ -56,7 +57,7 @@ def wavelength_from_freq(frequency:float):
 
 def wavenumber_from_freq(frequency:float):
     wavelength = wavelength_from_freq(frequency)
-    return 2/wavelength
+    return 2*np.pi/wavelength
 
 
 def convert(unit_a:float, unit_a_type:str, unit_b_type:str):
