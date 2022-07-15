@@ -1,6 +1,8 @@
 from scipy import constants
 import numpy as np
 
+""" Note: Any measure of degree will be in radians """
+
 def freq_from_angular_frequency(angular_frequency:float):
     """ This function returns the normal frequency of a wave
     from it's angular frequency
@@ -44,18 +46,43 @@ def freq_from_photon_energy(photon_energy:float):
 
 
 def angular_frequency_from_freq(frequency:float):
+    """ Returns the angular frequency of a wave
+    from it's linear frequency
+    
+    Units: Hertz -> Rotations/Second """
+
     return 2*np.pi*frequency
 
 def time_period_from_freq(frequency:float):
+    """ Returns the time period of a wave from
+    it's linear frequency
+    
+    Units: Hertz -> Seconds """
+    
     return 1/frequency
 
 def photon_energy_from_freq(frequency:float):
+    """ Returns the photon energy of a wave
+    from it's linear frequency 
+    
+    Units: Hertz -> Joules """
+
     return constants.Planck * frequency
 
 def wavelength_from_freq(frequency:float):
+    """ Returns the wavelength of a wave
+    from it's linear frequency
+    
+    Untils: Hertz -> Meters """
+
     return constants.speed_of_light / frequency
 
 def wavenumber_from_freq(frequency:float):
+    """ Returns the wavenumber of a wave
+    from it's linear frequency
+    
+    Utils: Hertz -> Cycles/Meter """
+
     wavelength = wavelength_from_freq(frequency)
     return 2*np.pi/wavelength
 
