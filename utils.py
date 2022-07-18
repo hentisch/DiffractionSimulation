@@ -1,4 +1,5 @@
 import itertools
+from math import dist
 import numpy as np
 import copy
 
@@ -49,3 +50,11 @@ def graph_function(func, min, max, num_samples) -> None:
     plt.plot(x_values, y_values)
 
     plt.show()
+
+def angle_between_points(point_a:tuple, point_b:tuple):
+    """ This function will return the angle between
+    two points on the cartesian plane """
+
+    adjacent_len = point_b[0] - point_a[0]
+    hypotenuse_len = dist(point_a, point_b)
+    return np.arccos(adjacent_len/hypotenuse_len)
