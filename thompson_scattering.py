@@ -32,7 +32,9 @@ def magnitude_by_angle(angle_of_observation:float, distance_from_scattering:floa
 
 if __name__ == "__main__":
     """ This script is not really meant to be ran on it's own - this bit of code just allows you to graph different variables of the function
-    for the purpose of debugging """
+    for the purpose of debugging.
     
+    Note that this does require matplotlib to be installed, which is not listed in the requirements.txt file """
+
     function = lambda x: magnitude_by_angle(angle_of_observation = x, distance_from_scattering=5, observation_time=2, wavenumber=4, wave_amplitude=2)
     graph_function(function, min=0.1, max=100, num_samples=1000)
