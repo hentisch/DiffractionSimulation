@@ -34,3 +34,18 @@ def rgb_to_mayavi(r, g, b):
     color a single byte to an rgb color with each color a 
     float between 0 and 1 """
     return r/255, g/255, b/255
+
+def graph_function(func, min, max, num_samples) -> None:
+    import matplotlib.pyplot as plt
+
+    x_values = np.linspace(min, max, num=num_samples)
+
+    y_values = np.zeros(num_samples)
+
+    for i, x in enumerate(x_values):
+        y_values[i] = func(x)
+        # print(func(x))
+    
+    plt.plot(x_values, y_values)
+
+    plt.show()
