@@ -88,6 +88,8 @@ def wavenumber_from_freq(frequency:float):
 
 
 def convert(unit_a:float, unit_a_type:str, unit_b_type:str):
+    """ This function converts any two of the above unit's, using 
+    frequency as an intermediate value """
     
     """ In this dictionary, each key has a tuple of functions as it's values, the first
     function converting from a given unit into frequency, and the second converting
