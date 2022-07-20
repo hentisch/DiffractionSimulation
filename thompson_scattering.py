@@ -4,7 +4,7 @@ import scipy as sp
 from scipy import integrate
 import wave_conversions as wc
 
-from utils import graph_function
+from utils import angle_between_lines, get_different_index, get_indices, graph_function, num_differences
 
 
 def amplitude_of_atomic_diffraction(angle_of_observation:float, wavenumber:float, charge_distribution:float):
@@ -39,28 +39,29 @@ def magnitude_by_angle(angle_of_observation:float, distance_from_scattering:floa
     elif returned_value == "real":
         return complex_value.real
 
-def magnitude_by_space(point_of_atom:tuple, point_of_observation:tuple, observation_time:float, wavenumber:float, wave_amplitude:float, polarization_of_electric_field="z"):
-    distance_from_scattering = dist(point_of_atom, point_of_observation)
-    """ 
-    Now, we need to get the angle of the observation point, in respect to the angle
-    of the incident light radiation, on the plane of polarization. First, we can reduce 
-    the 3d points to 2d points on the plane of polarization """
+def magnitude_by_space(atom_point:tuple, observation_point:tuple, wavevector_origin:tuple, observation_time:float, wave_amplitude:float, polarization_of_electric_field="z"):
+    distance_from_scattering = dist(atom_point, observation_point)
+    wavenumber = dist(wavevector_origin, atom_point) #magnitude of the wavevector
+    
+    """ The first thing we need to do (after finding the distance from scattering) is to simplify 
+    our 3d coordinates to 2d coordinates on the plane of polarization and the direction of the wave """
+
+    assert num_differences(atom_point, wavevector_origin) <= 1, "The plane of polarization and the wave direction should just be 2 of the 3 spacial dimensions"
 
     index_of_dimension = {'x':0, 'y':1, 'z':2}
+    polarization_dim_index = index_of_dimension[polarization_of_electric_field]
+    wave_dir_dim_ind = get_different_index(atom_point, wavevector_origin)
+    assert polarization_dim_index != wave_dir_dim_ind, "The dimension of polarization and the dimension of the wave direction should be different"
+    dimensions = sorted((polarization_dim_index, wave_dir_dim_ind)) #Because this is sorted, x will come before y, and so on
 
-    atom_2d = (0, 0)
-    observation_2d = (0, 0)
+    atom_2d = get_indices(atom_point, dimensions)
+    observation_2d = get_indices(observation_point, dimensions)
+    incident_2d = get_indices(wavevector_origin, dimensions)
 
-    assert polarization_of_electric_field == 'z', "Other directions of polarization have not yet been implemented"
+    incident_rad_vector = (incident_2d, atom_2d)
+    observation_vector = (atom_2d, observation_2d)
 
-    atom_2d = (point_of_atom[0], point_of_atom[2])
-    observation_2d = (point_of_observation[0], point_of_observation[2])
-
-    # Now, we need to find the angle of both points with respect to 0, 0
-    atom_angle = atan2(*atom_2d)
-    observation_angle = atan2(*observation_2d)
-
-    respective_angle = abs(atom_angle - observation_angle)
+    respective_angle = angle_between_lines(incident_rad_vector, observation_vector)
 
     return magnitude_by_angle(angle_of_observation=respective_angle, distance_from_scattering=distance_from_scattering, observation_time=observation_time,
     wavenumber=wavenumber, wave_amplitude=wave_amplitude)
@@ -70,6 +71,6 @@ if __name__ == "__main__":
     for the purpose of debugging.
     
     Note that this does require matplotlib to be installed, which is not listed in the requirements.txt file """
-
+    
     function = lambda x: magnitude_by_angle(angle_of_observation = x, distance_from_scattering=5, observation_time=2, wavenumber=4, wave_amplitude=2)
     graph_function(function, min=0.1, max=100, num_samples=1000)
