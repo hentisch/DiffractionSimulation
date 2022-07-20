@@ -65,11 +65,11 @@ def num_differences(arr_a, arr_b):
 
     assert len(arr_a) == len(arr_b), "Both arrays need to be the same shape"
 
-    one_difference = 0
+    differences = 0
     for i, e in enumerate(arr_a):
         if e != arr_b[i]:
-            one_difference += 1
-        return one_difference
+            differences += 1
+    return differences
 
 def get_different_index(arr_a, arr_b, check_single_difference=False) -> int:
     if check_single_difference:
