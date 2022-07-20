@@ -80,3 +80,9 @@ def get_different_index(arr_a, arr_b, check_single_difference=False) -> int:
     for i, e in arr_a:
         if arr_b[i] != e:
             return i
+
+def get_indices_tuple(arr, indices:list) -> list:
+    elements = []
+    for index in indices:
+        elements.append(arr[index])
+    return elements
