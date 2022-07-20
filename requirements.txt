@@ -1,3 +1,4 @@
 mayavi
+PyQt5
 numpy
 scipy
