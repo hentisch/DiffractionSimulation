@@ -77,7 +77,7 @@ def get_different_index(arr_a, arr_b, check_single_difference=False) -> int:
         assert num_diff == 1, f"There are a total of {num_diff} indices different between the two arrays, there should only be one"
         return
     
-    for i, e in arr_a:
+    for i, e in enumerate(arr_a):
         if arr_b[i] != e:
             return i
 
@@ -92,6 +92,9 @@ def get_slope(line:'tuple(tuple, tuple)'):
     line on the cartesian plane """
     rise = line[1][1] - line[0][1]
     run = line[1][0] - line[0][0]
+    if run == 0:
+        return np.inf
+    
     return rise/run
 
 def angle_between_lines(line_a, line_b):
