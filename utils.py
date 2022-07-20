@@ -2,7 +2,7 @@ from math import dist
 import numpy as np
 import copy
 
-def midpoint_formula(point_a:tuple[int, int], point_b:tuple[int, int]) -> tuple[int, int]:
+def midpoint_formula(point_a:'tuple[int, int]', point_b:'tuple[int, int]') -> 'tuple[int, int]':
     """ An implementation of the midpoint formula in 2d """
     a = (point_a[0] + point_a[1])
     b = (point_b[0] + point_b[1])
