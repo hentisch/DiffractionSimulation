@@ -86,3 +86,16 @@ def get_indices(arr, indices:list) -> list:
     for index in indices:
         elements.append(arr[index])
     return elements
+
+def get_slope(line:'tuple(tuple, tuple)'):
+    """ Returns the slope of a linear, 2d
+    line on the cartesian plane """
+    rise = line[1][1] - line[0][1]
+    run = line[1][0] - line[0][0]
+    return rise/run
+
+def angle_between_lines(line_a, line_b):
+    """ Returns the angle between two 
+    lines in the cartesian plane """
+    difference_in_angles = np.arctan(get_slope(line_a) - get_slope(line_b))
+    return np.pi - abs(difference_in_angles)
