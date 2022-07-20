@@ -57,3 +57,14 @@ def angle_between_points(point_a:tuple, point_b:tuple):
     adjacent_len = point_b[0] - point_a[0]
     hypotenuse_len = dist(point_a, point_b)
     return np.arccos(adjacent_len/hypotenuse_len)
+
+
+def num_differences(arr_a:np.array, arr_b:np.array):
+    """ This function will return the number of values
+    which are different between two equally sized arrays """
+    assert arr_a.shape == arr_b.shape, "Both arrays need to be the same shape"
+    one_difference = 0
+    for i, e in enumerate(arr_a):
+        if e != arr_b[i]:
+            one_difference += 1
+        return one_difference

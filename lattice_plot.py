@@ -4,7 +4,7 @@ from unit_cell import UnitCell
 import numpy as np
 from mayavi import mlab
 
-from utils import rgb_to_mayavi
+from utils import rgb_to_mayavi, num_differences
 
 def plot_lattice(lattice:CrystalLattice):
     """ This function will create and show a Mayavi 3d
@@ -15,19 +15,6 @@ def plot_lattice(lattice:CrystalLattice):
     for unit_cell_edges in lattice.edge_points:
         plot_box(unit_cell_edges, (255, 0, 0))
     mlab.show()
-
-
-
-def num_differences(arr_a:np.array, arr_b:np.array):
-    """ This function will return the number of values
-    which are different between two equally sized arrays """
-    assert arr_a.shape == arr_b.shape, "Both arrays need to be the same shape"
-    one_difference = 0
-    for i, e in enumerate(arr_a):
-        if e != arr_b[i]:
-            one_difference += 1
-    return one_difference
-
 
 def plot_box(corner_points:np.array, color:tuple):
     """TODO, this method is really poorly optimized, 
