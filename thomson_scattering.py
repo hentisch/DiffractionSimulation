@@ -4,7 +4,10 @@ import scipy as sp
 from scipy import integrate
 import wave_conversions as wc
 
-from utils import angle_between_lines, get_different_index, get_indices, graph_function, num_differences
+from geometry_utils import angle_between_lines
+from array_utils import get_different_index, get_indices, num_differences
+from utils import graph_function
+
 
 def amplitude_of_atomic_diffraction(angle_of_observation:float, wavenumber:float, charge_distribution:float):
     np.seterr('raise')
@@ -141,5 +144,5 @@ if __name__ == "__main__":
     
     Note that this does require matplotlib to be installed, which is not listed in the requirements.txt file """
     
-    function = lambda x: amplitude_by_angle(angle_of_observation = x, distance_from_scattering=5, observation_time=2, wavenumber=4, wave_amplitude=2)
+    function = lambda x: amplitude_by_angle(angle_of_observation = x, distance_from_scattering=5, observation_time=2, wavelength=1e-8, wave_amplitude=1)
     graph_function(function, min=0.1, max=100, num_samples=1000)
