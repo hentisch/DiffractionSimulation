@@ -4,7 +4,8 @@ from unit_cell import UnitCell
 import numpy as np
 from mayavi import mlab
 
-from utils import rgb_to_mayavi, num_differences
+from utils import rgb_to_mayavi
+from array_utils import num_differences
 
 def plot_lattice(lattice:CrystalLattice):
     """ This function will create and show a Mayavi 3d

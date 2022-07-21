@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils import midpoint_formula
+from geometry_utils import midpoint_formula
 
 """ This file contains several python functions to return a set of coordinates representing a single form of unit cell
 for use in a crystal lattice. This is returned as a 2d numpy matrix, with each element contains the (x, y, z) points 

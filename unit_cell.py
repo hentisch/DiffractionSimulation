@@ -3,7 +3,8 @@ from math import dist
 import numpy as np
 
 import raw_unit_cells
-from utils import flatten_matrix, shift_points, swap_indices
+from geometry_utils import shift_points
+
 class UnitCell:
     """ An class which represents a unit cell for a crystal lattice. 
     This contains plenty of static methods which will give you a certain type of lattice"""
