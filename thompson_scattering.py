@@ -13,7 +13,7 @@ def amplitude_of_atomic_diffraction(angle_of_observation:float, wavenumber:float
     return integrate.quad(func, 0.1e-10, np.inf)
 
 #TODO, make this method return phase and amplitude
-def amplitude_by_angle(angle_of_observation:float, distance_from_scattering:float, observation_time:float, wavelength:float, wave_amplitude:float, returned_value="real"):
+def amplitude_by_angle(angle_of_observation:float, distance_from_scattering:float, observation_time:float, wavelength:float, wave_amplitude:float, returned_value="real") -> float:
     """ Finds the amplitude of Thomson scattering from a certain
     point in space. This point is described in terms of the 
     'angle_of_observation', and 'distance_from_scattering'.
@@ -23,7 +23,8 @@ def amplitude_by_angle(angle_of_observation:float, distance_from_scattering:floa
     ---------- 
     angle_of_observation: float
         Angle of the point of observation in respect to the incident 
-        light, on the plane of scattering. This should be described in radians.
+        light, on the plane of scattering. This should be described in
+        radians.
     distance_from_scattering: float
         Distance between the point of scattering and the point of 
         observation. This should be described in meters.
@@ -34,8 +35,8 @@ def amplitude_by_angle(angle_of_observation:float, distance_from_scattering:floa
         The wavelength of the incident light. This should be described in 
         meters.
     wave_amplitude: float 
-        The strength of the incident electric field. This should be described
-        in volts/meter.
+        The strength of the incident electric field. This should be 
+        described in volts/meter.
     returned_value: str, [{"real", "complex"}, optional]
         The desired format of the returned value.
 
@@ -69,7 +70,7 @@ def amplitude_by_angle(angle_of_observation:float, distance_from_scattering:floa
     else:
         raise ValueError(f"Could not interpret value {returned_value}, use either \"complex\" or \"real\"")
 
-def amplitude_by_space(scattering_point:tuple, observation_point:tuple, wavevector_origin:tuple, observation_time:float, wave_amplitude:float, polarization_of_electric_field="z"):
+def amplitude_by_space(scattering_point:tuple, observation_point:tuple, wavevector_origin:tuple, observation_time:float, wave_amplitude:float, polarization_of_electric_field="z") -> float:
     """ Finds the amplitude of Thomson scattering based on several points
     in 3d space.
     
