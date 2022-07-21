@@ -21,35 +21,35 @@ def amplitude_by_angle(angle_of_observation:float, distance_from_scattering:floa
     
     Parameters
     ---------- 
-    angle_of_observation: float
+    angle_of_observation : float
         Angle of the point of observation in respect to the incident 
         light, on the plane of scattering. This should be described in
         radians.
-    distance_from_scattering: float
+    distance_from_scattering : float
         Distance between the point of scattering and the point of 
         observation. This should be described in meters.
-    observation_time: float
+    observation_time : float
         The time at which the scattered light is observed. This should
         be described in seconds.
-    wavelength: float
+    wavelength : float
         The wavelength of the incident light. This should be described in 
         meters.
-    wave_amplitude: float 
+    wave_amplitude : float 
         The strength of the incident electric field. This should be 
         described in volts/meter.
-    returned_value: str, [{"real", "complex"}, optional]
+    returned_value : str, [{"real", "complex"}, optional]
         The desired format of the returned value.
 
     Returns
     -------
-    scattered_magnitude: float
+    scattered_magnitude : float
         The amplitude of the scattered electric field at the described 
         point. This is described in volts/meter (assuming you passed the
         right units).
     
     See Also
     --------
-    amplitude_by_space: 
+    amplitude_by_space : 
         A wrapper around this function, which uses points in 3d space
         rather than the 'angle_of_observation' and 
         'distance_from-scattering'. 
@@ -76,33 +76,33 @@ def amplitude_by_space(scattering_point:tuple, observation_point:tuple, wavevect
     
     Parameters
     ----------
-    scattering_point: tuple of int (x, y, z)
+    scattering_point : tuple of int (x, y, z)
         The point at which the incident light is scattered.
     observation_point: tuple of int (x, y, z)
         The point at which the scattering of the incident light is 
         observed.
-    wavevector_origin: tuple of int (x, y, z)
+    wavevector_origin : tuple of int (x, y, z)
         The initial point of the wavevector of the incident light. The 
         terminal point is assumed to be the 'scattering_point'.
-    observation_time: float
+    observation_time : float
         The time at which the scattered light is observed. This should
         be described in seconds. 
-    wave_amplitude: float
+    wave_amplitude : float
         The amplitude of incident light's electric field. This should
         be described in volts/meter
-    polarization_of_electric_field: str, [{"z", "x", "y"}, optional]
+    polarization_of_electric_field : str, [{"z", "x", "y"}, optional]
         The dimension in which the electric field should be polarized. 
     
     Returns
     -------
-    scattered_magnitude: float
+    scattered_magnitude : float
         The amplitude of the scattered electric field at the described 
         point. This is described in volts/meter (assuming you passed the
         right units).
     
     See Also
     --------
-    magnitude_by_angle: 
+    magnitude_by_angle : 
         The function this function wraps. Finds amplitude of thomson 
         scattering based on the distance from the source of scattering,
         and the angle of the observation point in respect to the 
