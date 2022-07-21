@@ -4,10 +4,36 @@ from raw_unit_cells import simple_cubic
 from unit_cell import UnitCell
 
 class CrystalLattice:
+    """ A representation of the points in a crystal lattice.
     
+    Attributes
+    ----------
+    all_points : np.array
+        A 3d tensor of every point in the crystal lattice. The points are
+        organized into groups of unit cells, with the points themselves  
+        being simple x, y, z coordinates
+    edge_points : np.array
+        A 3d tensor of each "edge point" in the crystal lattice. The edge
+        points will form the bounding box of each unit cell when they 
+        are rendered.
+    """
+
     def __init__(self, shape:tuple[int, int, int], unit_cell:UnitCell) -> None:
-        """ Constructs a CrystalLattice object composed of the passed unit
-        cell and shaped in the form of the passed shape tuple """
+        """_summary_
+
+        Parameters
+        ----------
+        shape : tuple of int (x, y, z)
+            The shape that the crystal lattice should take. This is 
+            described in unit cells.
+        unit_cell : UnitCell
+            The unit cell the lattice should be composed of. 
+
+        See Also
+        --------
+        UnitCell : 
+            The class used to represent a unit cell. 
+        """        
 
         self.all_points = np.zeros((np.prod(shape), unit_cell.num_points, 3))
         self.edge_points = np.zeros((np.prod(shape), unit_cell.num_edge_points, 3))
@@ -24,5 +50,12 @@ class CrystalLattice:
                     current_lattice_index += 1
         
     def get_raw_points(self):
-        """ Returns a simple matrix of points representing each atom in the larger lattice """
+        """Returns the lattice structure as a matrix of points
+
+        Returns
+        -------
+        np.array:
+            A 2d array representing a list of (x, y, z) points at which
+            atoms should be drawn
+        """        
         return self.all_points.reshape((self.all_points.shape[1]*self.all_points.shape[0], 3))
