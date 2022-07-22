@@ -19,7 +19,7 @@ class CrystalLattice:
     """
 
     def __init__(self, shape:tuple[int, int, int], unit_cell:UnitCell) -> None:
-        """_summary_
+        """A constructor for the CrystalLattice class.
 
         Parameters
         ----------
