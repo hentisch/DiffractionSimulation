@@ -18,7 +18,7 @@ def rgb_to_mayavi(r:int, g:int, b:int) -> tuple:
     
     return r/255, g/255, b/255
 
-def graph_function(func:'function', min:float, max:float, num_samples:int) -> None:
+def graph_function(func:'function', min:float, max:float, num_samples:int, title=None, x_label=None, y_label=None) -> None:
     """Display a graph of a numerical function
 
     Parameters
@@ -33,6 +33,11 @@ def graph_function(func:'function', min:float, max:float, num_samples:int) -> No
         The number of points to calculate and render on the plot. Note
         that higher values will create a smoother plot, though will also
         take longer to be display and be slower to interact with.
+    title : str, optional
+        A title to be rendered with the plot
+    x_label, y_label : str
+        A label for the x and y axis, which will be rendered with the 
+        plot.
     
     Returns
     -------
@@ -52,8 +57,16 @@ def graph_function(func:'function', min:float, max:float, num_samples:int) -> No
 
     for i, x in enumerate(x_values):
         y_values[i] = func(x)
-        # print(func(x))
     
     plt.plot(x_values, y_values)
+
+    if title != None:
+        plt.title(title)
+    
+    if x_label != None:
+        plt.xlabel(x_label)
+    
+    if y_label != None:
+        plt.ylabel(y_label)
 
     plt.show()
