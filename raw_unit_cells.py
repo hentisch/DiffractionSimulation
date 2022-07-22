@@ -50,8 +50,19 @@ def body_centered_cubic(side_length:int):
     return points
 
 def face_centered_cubic(side_length:int):
-    """ This method will return the points (with their origin at 0,0) that make up
-    a simple cubic unit cell"""
+    """Returns the points of a face centered cubic unit cell, with the passed
+    side length
+
+    Parameters
+    ----------
+    side_length : int
+        The side length of the unit cell
+
+    Returns
+    -------
+    np.array of np.array
+        A matrix of the points making up the unit cell
+    """    
 
     points = np.zeros((14, 3))
 
