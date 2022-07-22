@@ -1,14 +1,21 @@
 import numpy as np
 
-from geometry_utils import midpoint_formula
+from geometry_utils import midpoint_formula, get_xy_tuple
 
-""" This file contains several python functions to return a set of coordinates representing a single form of unit cell
-for use in a crystal lattice. This is returned as a 2d numpy matrix, with each element contains the (x, y, z) points 
-of each particular atom """
+def simple_cubic(side_length:int) -> np.array:
+    """Returns the points of a simple cubic unit cell, with the passed
+    side length
 
-def simple_cubic(side_length:int):
-    """ This method will return the points (with their origin at 0,0) that make up
-    a simple cubic unit cell"""
+    Parameters
+    ----------
+    side_length : int
+        The side length of the unit cell
+
+    Returns
+    -------
+    np.array of np.array
+        A matrix of the points making up the unit cell
+    """    
     points = np.zeros((8, 3))
 
     point_counter = 0
@@ -21,8 +28,19 @@ def simple_cubic(side_length:int):
     return points
 
 def body_centered_cubic(side_length:int):
-    """ This method will return the points (with their origin at 0,0) that make up
-        a simple cubic unit cell"""
+    """Returns the points of a body centered cubic unit cell, with the passed
+    side length
+
+    Parameters
+    ----------
+    side_length : int
+        The side length of the unit cell
+
+    Returns
+    -------
+    np.array of np.array
+        A matrix of the points making up the unit cell
+    """    
     points = np.zeros((9, 3))
 
     points[:8] = simple_cubic(side_length)
@@ -30,10 +48,6 @@ def body_centered_cubic(side_length:int):
     points[8] = np.array((side_length/2, side_length/2, side_length/2))
 
     return points
-
-def get_xy_tuple(coordinates:np.array):
-    """ Returns a tuple of the x and y coordinates of the passed 3d point """
-    return (coordinates[0], coordinates[1])
 
 def face_centered_cubic(side_length:int):
     """ This method will return the points (with their origin at 0,0) that make up

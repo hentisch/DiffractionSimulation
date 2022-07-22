@@ -93,3 +93,18 @@ def angle_between_lines(line_a, line_b):
     """    
     difference_in_angles = np.arctan(get_slope(line_a) - get_slope(line_b))
     return np.pi - abs(difference_in_angles)
+
+def get_xy_tuple(coordinates:np.array) -> tuple:
+    """Return the x, y coordinates of a np.array of x, y, and z points
+
+    Parameters
+    ----------
+    coordinates : np.array
+        The 3d coordinates to get the x, y coordinates from
+
+    Returns
+    -------
+    tuple of float (x, y)
+        The x, y coordinates of the passed 3d coordinates
+    """    
+    return (coordinates[0], coordinates[1])
