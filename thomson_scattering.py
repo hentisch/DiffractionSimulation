@@ -1,4 +1,5 @@
 from math import atan2, dist
+from random import random
 import numpy as np
 import scipy as sp
 from scipy import integrate
@@ -16,7 +17,7 @@ def amplitude_of_atomic_diffraction(angle_of_observation:float, wavenumber:float
     return integrate.quad(func, 0.1e-10, np.inf)
 
 #TODO, make this method return phase and amplitude
-def amplitude_by_angle(angle_of_observation:float, distance_from_scattering:float, observation_time:float, wavelength:float, wave_amplitude:float, returned_value="real") -> float:
+def scattering_by_angle(angle_of_observation:float, distance_from_scattering:float, observation_time:float, wavelength:float, wave_amplitude:float, returned_value="amplitude") -> float:
     """ Finds the amplitude of Thomson scattering from a certain
     point in space. This point is described in terms of the 
     'angle_of_observation', and 'distance_from_scattering'.
@@ -40,15 +41,23 @@ def amplitude_by_angle(angle_of_observation:float, distance_from_scattering:floa
     wave_amplitude : float 
         The strength of the incident electric field. This should be 
         described in volts/meter.
-    returned_value : str, [{"real", "complex"}, optional]
-        The desired format of the returned value.
-
+    returned_value : str, [{"amplitude", "phase", "both"}, optional]
+        The part of the scattered wave to be returned
+    
     Returns
     -------
-    scattered_magnitude : float
-        The amplitude of the scattered electric field at the described 
+    amplitude : float
+        The amplitude of the scattered electric field at the passed 
         point. This is described in volts/meter (assuming you passed the
         right units).
+    phase: float
+        The phase of the scattered electric field at the passed point.
+        This is described in radians (assuming you passed the right
+        units)
+    both : tuple of float
+        A tuple of the amplitude and phase of the wave at the described
+        point (amplitude, phase)
+    
     
     See Also
     --------
@@ -66,14 +75,19 @@ def amplitude_by_angle(angle_of_observation:float, distance_from_scattering:floa
 
     complex_value = oscillatory_multiplicand * oscillatory_wave_value  * round(np.cos(angle_of_observation), 5)
 
-    if returned_value == "complex":
-        return complex_value
-    elif returned_value == "real":
-        return complex_value.real
-    else:
-        raise ValueError(f"Could not interpret value {returned_value}, use either \"complex\" or \"real\"")
+    amplitude = abs(complex_value)
+    phase = np.arctan(complex_value.real/complex_value.imag)
 
-def amplitude_by_space(scattering_point:tuple, observation_point:tuple, wavevector_origin:tuple, observation_time:float, wave_amplitude:float, polarization_of_electric_field="z") -> float:
+    if returned_value == "amplitude":
+        return amplitude
+    elif returned_value == "phase":
+        return phase
+    elif returned_value == "both":
+        return (amplitude, phase)
+    else:
+        raise ValueError(f"Could not interpret value {returned_value}, use either \"amplitude\" or \"phase\"")
+
+def scattering(scattering_point:tuple, observation_point:tuple, wavevector_origin:tuple, observation_time:float, wave_amplitude:float, polarization_of_electric_field="z", returned_value="amplitude") -> float:
     """ Finds the amplitude of Thomson scattering based on several points
     in 3d space.
     
@@ -92,21 +106,30 @@ def amplitude_by_space(scattering_point:tuple, observation_point:tuple, wavevect
         be described in seconds. 
     wave_amplitude : float
         The amplitude of incident light's electric field. This should
-        be described in volts/meter
+        be described in volts/meter.
     polarization_of_electric_field : str, [{"z", "x", "y"}, optional]
         The dimension in which the electric field should be polarized. 
+    returned_value : str, [{"amplitude", "phase", "both"}, optional]
+        The part of the scattered wave to be returned.
     
     Returns
     -------
-    scattered_magnitude : float
-        The amplitude of the scattered electric field at the described 
+    amplitude : float
+        The amplitude of the scattered electric field at the passed 
         point. This is described in volts/meter (assuming you passed the
         right units).
+    phase: float
+        The phase of the scattered electric field at the passed point.
+        This is described in radians (assuming you passed the right
+        units)
+    both : tuple of float
+        A tuple of the amplitude and phase of the wave at the described
+        point (amplitude, phase)
     
     See Also
     --------
-    magnitude_by_angle : 
-        The function this function wraps. Finds amplitude of thomson 
+    scattering_by_angle : 
+        The function this function wraps. Computes Thomson 
         scattering based on the distance from the source of scattering,
         and the angle of the observation point in respect to the 
         incident light.
@@ -135,8 +158,8 @@ def amplitude_by_space(scattering_point:tuple, observation_point:tuple, wavevect
 
     respective_angle = angle_between_lines(incident_rad_vector, observation_vector)
 
-    return amplitude_by_angle(angle_of_observation=respective_angle, distance_from_scattering=distance_from_scattering, observation_time=observation_time,
-    wavenumber=wavenumber, wave_amplitude=wave_amplitude)
+    return scattering_by_angle(angle_of_observation=respective_angle, distance_from_scattering=distance_from_scattering, observation_time=observation_time,
+    wavenumber=wavenumber, wave_amplitude=wave_amplitude, returned_value=returned_value)
 
 if __name__ == "__main__":
     """ This script is not really meant to be ran on it's own - this bit of code just allows you to graph different variables of the function
@@ -144,5 +167,5 @@ if __name__ == "__main__":
     
     Note that this does require matplotlib to be installed, which is not listed in the requirements.txt file """
     
-    function = lambda x: amplitude_by_angle(angle_of_observation = x, distance_from_scattering=5, observation_time=2, wavelength=1e-8, wave_amplitude=1)
-    graph_function(function, min=0.1, max=100, num_samples=1000)
+    function = lambda x: scattering_by_angle(angle_of_observation = np.pi*1, distance_from_scattering=5, observation_time=x, wavelength=1e-8, wave_amplitude=1)
+    graph_function(function, min=0.1, max=100, num_samples=10000)
