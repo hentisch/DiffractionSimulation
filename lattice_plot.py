@@ -8,8 +8,17 @@ from utils import rgb_to_mayavi
 from array_utils import num_differences
 
 def plot_lattice(lattice:CrystalLattice):
-    """ This function will create and show a Mayavi 3d
-    plot of the passed CrystalLattice object """
+    """Plots and displays a Mayavi plot of the passed crystal lattice
+
+    Parameters
+    ----------
+    lattice : CrystalLattice
+        The crystal lattice to make a plot of.
+    
+    Returns
+    -------
+    None
+    """    
     points = lattice.get_raw_points()
     plot = mlab.points3d(points[:,0], points[:,1], points[:,2], scale_factor=0.1, resolution=20)
     points = np.array([[1, 2, 3], [1, 4, 3]]) 
@@ -17,10 +26,27 @@ def plot_lattice(lattice:CrystalLattice):
         plot_box(unit_cell_edges, (255, 0, 0))
     mlab.show()
 
-def plot_box(corner_points:np.array, color:tuple):
-    """TODO, this method is really poorly optimized, 
-    https://docs.enthought.com/mayavi/mayavi/auto/example_plotting_many_lines.html,
-    would probably be the way to do this"""
+def plot_box(corner_points:np.array, color:tuple) -> None:
+
+    """ Plots a bounding box in the current Mayavi plot
+    
+    Parameters
+    ---------- 
+    corner_points:np.array
+        The corner points making up the bounding box
+    color:tuple of int (r, g, b)
+        The desired color of the bounding box, represented as a 24 bit
+        color, with each value ranging from 0 to 255
+        
+    Returns
+    -------
+    None
+    
+    Note
+    ----
+    This method is not very well optimized,
+    <https://docs.enthought.com/mayavi/mayavi/auto/example_plotting_many_lines.html>
+    would probably be a better way. """
 
     lines = set()
     for point in corner_points:
