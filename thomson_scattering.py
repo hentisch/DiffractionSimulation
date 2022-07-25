@@ -87,7 +87,7 @@ def scattering_by_angle(angle_of_observation:float, distance_from_scattering:flo
     else:
         raise ValueError(f"Could not interpret value {returned_value}, use either \"amplitude\" or \"phase\"")
 
-def scattering(scattering_point:tuple, observation_point:tuple, wavevector_origin:tuple, observation_time:float, wave_amplitude:float, polarization_of_electric_field="z", returned_value="amplitude") -> float:
+def scattering_by_space(scattering_point:tuple, observation_point:tuple, wavevector_origin:tuple, observation_time:float, wave_amplitude:float, polarization_of_electric_field="z", returned_value="amplitude") -> float:
     """ Finds the amplitude of Thomson scattering based on several points
     in 3d space.
     
@@ -137,6 +137,7 @@ def scattering(scattering_point:tuple, observation_point:tuple, wavevector_origi
 
     distance_from_scattering = dist(scattering_point, observation_point)
     wavenumber = dist(wavevector_origin, scattering_point) #magnitude of the wavevector
+    wavelength = wc.convert(wavenumber, "wavenumber", "wavelength")
     
     """ The first thing we need to do (after finding the distance from scattering) is to simplify 
     our 3d coordinates to 2d coordinates on the plane of polarization and the direction of the wave """
@@ -158,7 +159,7 @@ def scattering(scattering_point:tuple, observation_point:tuple, wavevector_origi
     respective_angle = angle_between_lines(incident_rad_vector, observation_vector)
 
     return scattering_by_angle(angle_of_observation=respective_angle, distance_from_scattering=distance_from_scattering, observation_time=observation_time,
-    wavenumber=wavenumber, wave_amplitude=wave_amplitude, returned_value=returned_value)
+    wavelength=wavelength, wave_amplitude=wave_amplitude, returned_value=returned_value)
 
 if __name__ == "__main__":
     """ This script is not really meant to be ran on it's own - this bit of code just allows you to graph different variables of the function
