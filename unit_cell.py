@@ -135,7 +135,7 @@ class UnitCell:
             A unit cell with a simple cubic structure and a side_length 
             of 'side_length'
         """        
-        return UnitCell(raw_unit_cells.simple_cubic(), side_length=side_length, edge_points=raw_unit_cells.simple_cubic(side_length))
+        return UnitCell(raw_unit_cells.simple_cubic(1), side_length=side_length, edge_points=raw_unit_cells.simple_cubic(side_length))
     
     def body_centered_cubic(side_length:float) -> 'UnitCell':
         """Returns a UnitCell object with the points of a body centered cubic
@@ -151,7 +151,7 @@ class UnitCell:
             A unit cell with a body centered cubic structure and a side
             length of 'side_length'
         """        
-        return UnitCell(raw_unit_cells.body_centered_cubic(), side_length=side_length, edge_points=raw_unit_cells.simple_cubic(side_length))
+        return UnitCell(raw_unit_cells.body_centered_cubic(1), side_length=side_length, edge_points=raw_unit_cells.simple_cubic(side_length))
     
     def face_centered_cubic(side_length:float) -> 'UnitCell':
         """Returns a UnitCell object with the points of a face centered cubic
@@ -167,4 +167,4 @@ class UnitCell:
             A unit cell with a face centered cubic structure and a side
             length of 'side_length'
         """        
-        return UnitCell(raw_unit_cells.face_centered_cubic(), side_length=side_length, edge_points=raw_unit_cells.simple_cubic(side_length))
+        return UnitCell(raw_unit_cells.face_centered_cubic(1), side_length=side_length, edge_points=raw_unit_cells.simple_cubic(side_length))
