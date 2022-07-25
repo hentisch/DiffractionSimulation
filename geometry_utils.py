@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-from array_utils import get_indices
+from array_utils import exclude_indices, get_indices, fill_skipping
 
 def midpoint_formula(point_a:'tuple[int, int]', point_b:'tuple[int, int]') -> 'tuple[int, int]':
     """ An implementation of the midpoint formula in 2d.
@@ -86,15 +86,11 @@ def rotate_point(point:np.array, rotation_angle:float, center_point:np.array) ->
     return new_x, new_y
 
 def rotate_3d_point(point:np.array, angle:float, center_point:np.array, dimension:str):
-    indices = [0, 1, 2]
-    indices.pop(index_by_dimension[dimension])
-    x, y = get_indices(point, indices)
-    c_x, c_y = get_indices(center_point, indices)
-    x, y = rotate_point((x, y), angle, (c_x, c_y))
-    
-    new_point = np.copy(point)
-    new_point[indices[0]] = x
-    new_point[indices[1]] = y
+    x, y = exclude_indices(point, (index_by_dimension[dimension],))
+    c_x, c_y = exclude_indices(center_point, (index_by_dimension[dimension],))
+    x_y = rotate_point((x, y), angle, (c_x, c_y))
+
+    new_point = fill_skipping(point, x_y, (index_by_dimension[dimension],))
 
     return new_point
 
@@ -140,6 +136,17 @@ def rotate_3d_points(points:np.array, angle:float, dimension:str, center_point:n
         rotated_points[i] = rotate_3d_point(point, angle, center_point, dimension)
     
     return rotated_points
+
+def rotate_by_euler(points:np.array, angles:tuple, center_point:tuple):
+
+    new_points = np.copy(points)
+    dimensions = ('x', 'y', 'z')
+    for i, angle in enumerate(angles):
+        new_points = rotate_3d_points(new_points, angle, dimensions[i], center_point)
+    
+    return new_points
+
+
 def angle_between_points(point_a:tuple, point_b:tuple):
     """Returns the angle between two points in cartesian space
 
@@ -157,6 +164,14 @@ def angle_between_points(point_a:tuple, point_b:tuple):
     adjacent_len = point_b[0] - point_a[0]
     hypotenuse_len = math.dist(point_a, point_b)
     return np.arccos(adjacent_len/hypotenuse_len)
+
+def angle_between_3d_points(point_a:tuple, point_b:tuple):
+
+    angle = np.zeros((1, 3))
+    for i, axis in enumerate(point_a):
+        angle[i] = angle_between_points(axis, point_b[i])
+    
+    return angle
 
 def get_slope(line:'tuple(tuple, tuple)') -> float:
     """ Return the slope of a line

@@ -123,3 +123,32 @@ def get_indices(arr, indices) -> list:
     for index in indices:
         elements.append(arr[index])
     return elements
+
+def exclude_indices(arr, indices) -> list:
+    if len(indices) > 8: #Totally arbitrary value for optimization
+        indices = set(indices)
+    
+    elements = []
+    for i, item in enumerate(arr):
+        if i not in indices:
+            elements.append(item)
+    
+    return elements
+
+def fill_skipping(arr, values, indices):
+    new_arr = []
+
+    if len(indices) > 8: #Totally arbitrary value for optimization
+        indices = set(indices)
+    
+    value_ind = 0
+    for i, element in enumerate(arr):
+        if i not in indices:
+            new_arr.append(values[value_ind])
+            value_ind += 1
+        else:
+            new_arr.append(element)
+    
+    return new_arr
+
+print(fill_skipping((1, 2, 3), (9, 9), (1,)))
