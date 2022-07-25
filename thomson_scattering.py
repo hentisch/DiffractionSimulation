@@ -5,7 +5,7 @@ import scipy as sp
 from scipy import integrate
 import wave_conversions as wc
 
-from geometry_utils import angle_between_lines
+from geometry_utils import angle_between_lines, index_by_dimension
 from array_utils import get_different_index, get_indices, num_differences
 from utils import graph_function
 
@@ -143,8 +143,7 @@ def scattering(scattering_point:tuple, observation_point:tuple, wavevector_origi
 
     assert num_differences(scattering_point, wavevector_origin) <= 1, "The plane of polarization and the wave direction should just be 2 of the 3 spacial dimensions"
 
-    index_of_dimension = {'x':0, 'y':1, 'z':2}
-    polarization_dim_index = index_of_dimension[polarization_of_electric_field]
+    polarization_dim_index = index_by_dimension[polarization_of_electric_field]
     wave_dir_dim_ind = get_different_index(scattering_point, wavevector_origin)
     assert polarization_dim_index != wave_dir_dim_ind, "The dimension of polarization and the dimension of the wave direction should be different"
     dimensions = sorted((polarization_dim_index, wave_dir_dim_ind)) #Because this is sorted, x will come before y, and so on
