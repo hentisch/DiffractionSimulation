@@ -1,6 +1,8 @@
 import numpy as np
 import math
 
+from array_utils import get_indices
+
 def midpoint_formula(point_a:'tuple[int, int]', point_b:'tuple[int, int]') -> 'tuple[int, int]':
     """ An implementation of the midpoint formula in 2d.
     
@@ -39,6 +41,105 @@ def shift_points(points:np.array, x_shift:int, y_shift:float, z_shift:float) -> 
     points[:,1] += y_shift
     points[:,2] += z_shift
 
+index_by_dimension = {'x':0, 'y':1, 'z':2}
+""" A dictionary giving the index of each dimension in a 3d coordinate
+(x, y, z) """
+
+def rotate_point(point:np.array, rotation_angle:float, center_point:np.array) -> tuple:
+    """Returns a 'point', rotated 'rotation_angle' around 'center_point'.
+
+    Parameters
+    ----------
+    point : np.array
+        The point to rotate.
+    rotation_angle : float
+        The strength of the rotation. Note that this does not correspond 
+        to a specific orientation, but rather a rotation to apply. (So, 
+        rotating a point by 0.5pi 2 times is the same as rotating it by 
+        pi).
+    center_point : np.array
+        The point to rotate 'point' around.
+
+    Returns
+    -------
+    tuple
+        The rotated point.
+
+    Notes
+    -----
+    This function is an implementation of the equation:
+
+    x1 = (x0 - xc)cos(θ) - (y0 - yc)sin(θ) + xc
+    y1 = (x0 - xc)sin(θ) + (y0 - yc)cos(θ) + yc
+
+    Where x1 and y1 are the coordinates of  the rotated point,
+    theta is the angle of rotation, and xc and yc are the coordinates
+    of the center point
+    
+    """    
+    sin_angle = np.sin(rotation_angle)
+    cos_angle = np.cos(rotation_angle)
+
+    new_x = (point[0] - center_point[0]) * cos_angle - (point[1] - center_point[1]) * sin_angle + center_point[0]
+    new_y = (point[1] - center_point[1]) * cos_angle + (point[0] - center_point[0]) * sin_angle + center_point[1]
+
+    return new_x, new_y
+
+def rotate_3d_point(point:np.array, angle:float, center_point:np.array, dimension:str):
+    indices = [0, 1, 2]
+    indices.pop(index_by_dimension[dimension])
+    x, y = get_indices(point, indices)
+    c_x, c_y = get_indices(center_point, indices)
+    x, y = rotate_point((x, y), angle, (c_x, c_y))
+    
+    new_point = np.copy(point)
+    new_point[indices[0]] = x
+    new_point[indices[1]] = y
+
+    return new_point
+
+def rotate_3d_points(points:np.array, angle:float, dimension:str, center_point:np.array) -> np.array:
+    """Returns a copy of 'points', rotated by 'angle' on the 'dimension'
+    axis
+
+    Parameters
+    ----------
+    points : np.array
+        A matrix of points to be rotated. This should be a np.array of 
+        (x, y, z) np.arrays.
+    angle : float
+        The magnitude of rotation. This needs to be a radian value.
+        value.
+    dimension : {"x", "y", "z"}
+        The dimension on which 'points' will be rotated.
+    center_point : np.array
+        The point to rotate each point around
+
+    Returns
+    -------
+    np.array
+        a copy of 'points', rotated by 'angle' on the 'dimension' axis
+
+    Notes
+    -----
+    This function is based on the following equation, which rotates a 2d
+    point (x, y) in cartesian space:
+    
+    x' = x*cos(a) - y*sin(a)
+    y' = y*cos(a) + x*sin(a)
+    
+    Where a is the magnitude of the rotation.
+    """    
+
+    """ First we need to convert the 3d points into the points relevant
+    for the rotation around our desired axis. For this, we just remove
+    the point which represents the passed dimension """
+
+    rotated_points = np.zeros(points.shape)
+    for i, point in enumerate(points):
+        rotated_points[i] = rotate_3d_point(point, angle, center_point, dimension)
+    
+    return rotated_points
 def angle_between_points(point_a:tuple, point_b:tuple):
     """Returns the angle between two points in cartesian space
 
