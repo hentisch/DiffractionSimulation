@@ -5,6 +5,8 @@ import scipy as sp
 from scipy import integrate
 import wave_conversions as wc
 
+import cmath
+
 from geometry_utils import angle_between_lines, index_by_dimension
 from array_utils import get_different_index, get_indices, num_differences
 from utils import graph_function
@@ -74,9 +76,8 @@ def scattering_by_angle(angle_of_observation:float, distance_from_scattering:flo
     oscillatory_wave_value = np.exp(1j * (wc.convert(wavelength, "wavelength", "wavenumber")*distance_from_scattering - wc.convert(wavelength, "wavelength", "angular_frequency")*observation_time) ) / distance_from_scattering
 
     complex_value = oscillatory_multiplicand * oscillatory_wave_value  * round(np.cos(angle_of_observation), 5)
-
-    amplitude = abs(complex_value)
-    phase = np.arctan(complex_value.real/complex_value.imag)
+    
+    amplitude, phase = cmath.polar(complex_value)
 
     if returned_value == "amplitude":
         return amplitude
@@ -167,5 +168,5 @@ if __name__ == "__main__":
     
     Note that this does require matplotlib to be installed, which is not listed in the requirements.txt file """
     
-    function = lambda x: scattering_by_angle(angle_of_observation = np.pi*1, distance_from_scattering=5, observation_time=x, wavelength=1e-8, wave_amplitude=1)
-    graph_function(function, min=0.1, max=100, num_samples=10000)
+    function = lambda x: scattering_by_angle(angle_of_observation = np.pi*1, distance_from_scattering=5, observation_time=x, wavelength=10000000, wave_amplitude=1, returned_value="phase")
+    graph_function(function, min=0.1, max=100, num_samples=100000)
