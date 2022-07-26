@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 
 def rgb_to_mayavi(r:int, g:int, b:int) -> tuple:
@@ -17,6 +18,16 @@ def rgb_to_mayavi(r:int, g:int, b:int) -> tuple:
     """
     
     return r/255, g/255, b/255
+
+def add_graph_to_plot(func:'function', min:float, max:float, num_samples:int, color="black"):
+    x_values = np.linspace(min, max, num=num_samples)
+
+    y_values = np.zeros(num_samples)
+
+    for i, x in enumerate(x_values):
+        y_values[i] = func(x)
+    
+    plt.plot(x_values, y_values,  color=color)
 
 def graph_function(func:'function', min:float, max:float, num_samples:int, title=None, x_label=None, y_label=None) -> None:
     """Display a graph of a numerical function
@@ -48,17 +59,7 @@ def graph_function(func:'function', min:float, max:float, num_samples:int, title
     This function uses matplotlib, which is not listed as a requirement
     in this project. To install matplotlib just use pip install matplotlib
     """    
-
-    import matplotlib.pyplot as plt
-
-    x_values = np.linspace(min, max, num=num_samples)
-
-    y_values = np.zeros(num_samples)
-
-    for i, x in enumerate(x_values):
-        y_values[i] = func(x)
-    
-    plt.plot(x_values, y_values)
+    add_graph_to_plot(func, min, max, num_samples)
 
     if title != None:
         plt.title(title)
