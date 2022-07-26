@@ -1,4 +1,8 @@
 mayavi
 PyQt5
+
+matplotlib
+
 numpy
 scipy
+astropy
