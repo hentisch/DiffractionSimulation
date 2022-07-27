@@ -8,7 +8,7 @@ from traitsui.api import View, Item, Group
 from mayavi.core.ui.api import MayaviScene, SceneEditor, MlabSceneModel
 
 class FieldModel(HasTraits):
-    slider = Range(0, 100, 0.2)
+    time = Range(0, 100, 0.2)
     scene = Instance(MlabSceneModel, ())
 
     mode_select = Enum('amplitude', 'phase')
@@ -19,7 +19,7 @@ class FieldModel(HasTraits):
         self.current_mode = "amplitude"
 
         self.plot_size = plot_size
-        self.wavevector_orgin = wavevector_origin
+        self.wavevector_origin = wavevector_origin
         self.time = 0
         self.wave_amplitude = 5
 
@@ -34,16 +34,16 @@ class FieldModel(HasTraits):
         for x in range(self.plot_size[0]):
             for y in range(self.plot_size[1]):
                 for z in range(self.plot_size[2]):
-                    cloud[x, y, z] = ts.scattering_by_space(atom_point, (x, y, z), self.wavevector_orgin, self.time, self.wave_amplitude, returned_value=self.mode_select)
+                    cloud[x, y, z] = ts.scattering_by_space(atom_point, (x, y, z), self.wavevector_origin, self.time, self.wave_amplitude, returned_value=self.mode_select)
         
         return cloud
         
     def update_plot(self):
         self.s.mlab_source.scalars = self.get_electric_scalar_field()
     
-    @on_trait_change('slider')
+    @on_trait_change('time')
     def slider_changed(self):
-        self.time = self.slider
+        self.time = self.time
         self.update_plot()
     
     @on_trait_change('mode_select')
@@ -52,7 +52,7 @@ class FieldModel(HasTraits):
             self.current_mode = self.mode_select
             self.update_plot()
 
-    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene)), Group('slider', 'mode_select'), resizable=True)
+    view = View(Item('scene', editor=SceneEditor(scene_class=MayaviScene)), Group('time', 'mode_select'), resizable=True)
 
 if __name__ == "__main__":
     model = FieldModel((20, 20, 20), (10, 0, 10), 1)
