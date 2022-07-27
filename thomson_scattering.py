@@ -1,8 +1,14 @@
+from ast import arg
 from math import atan2, dist
 from random import random
 import numpy as np
 import scipy as sp
+
+from astropy import constants
+from astropy import units as u
+
 from scipy import integrate
+
 import wave_conversions as wc
 
 import cmath
@@ -11,15 +17,11 @@ from geometry_utils import angle_between_lines, index_by_dimension
 from array_utils import get_different_index, get_indices, num_differences
 from utils import graph_function
 
-
-def amplitude_of_atomic_diffraction(angle_of_observation:float, wavenumber:float, charge_distribution:float):
-    np.seterr('raise')
-    k = ( 4*np.pi * np.sin(angle_of_observation*2) ) / wc.convert(wavenumber, 'wavenumber', 'wavelength')
-    func = lambda r: 4*np.pi*r*charge_distribution * (np.sin(k*r)/k*r)
-    return integrate.quad(func, 0.1e-10, np.inf)
+from numba import njit
 
 #TODO, make this method return phase and amplitude
-def scattering_by_angle(angle_of_observation:float, distance_from_scattering:float, observation_time:float, wavelength:float, wave_amplitude:float, returned_value="amplitude") -> float:
+@njit()
+def scattering_by_angle(angle_of_observation:float, distance_from_scattering:float, observation_time:float, wavelength:float, wave_amplitude:float, returned_value="amplitude", round_cos=False) -> float:
     """ Finds the amplitude of Thomson scattering from a certain
     point in space. This point is described in terms of the 
     'angle_of_observation', and 'distance_from_scattering'.
@@ -43,9 +45,13 @@ def scattering_by_angle(angle_of_observation:float, distance_from_scattering:flo
     wave_amplitude : float 
         The strength of the incident electric field. This should be 
         described in volts/meter.
-    returned_value : str, [{"amplitude", "phase", "both"}, optional]
+    returned_value : [{"amplitude", "phase", "both"}, optional]
         The part of the scattered wave to be returned
-    
+    round_cos : bool
+        If True, the cosine value which attenuates the scattering will be
+        rounded. Note that while this does make the values of the function
+        more predictable, it does have a significant effect on performance
+        when this function is called many times.
     Returns
     -------
     amplitude : float
@@ -69,14 +75,21 @@ def scattering_by_angle(angle_of_observation:float, distance_from_scattering:flo
         'distance_from-scattering'. 
     """
     
-    thomson_scattering_length = sp.constants.value("classical electron radius")
+    # thomson_scattering_length = sp.constants.value("classical electron radius")
+
+    thomson_scattering_length = 2.8179403262e-15
 
     oscillatory_multiplicand = -thomson_scattering_length*wave_amplitude
     
     oscillatory_wave_value = np.exp(1j * (wc.convert(wavelength, "wavelength", "wavenumber")*distance_from_scattering - wc.convert(wavelength, "wavelength", "angular_frequency")*observation_time) ) / distance_from_scattering
 
-    complex_value = oscillatory_multiplicand * oscillatory_wave_value  * round(np.cos(angle_of_observation), 5)
-    
+    cosine_val = np.cos(angle_of_observation)
+
+    if round_cos:
+        cosine_val = round(cosine_val)
+
+    complex_value = oscillatory_multiplicand * oscillatory_wave_value  * cosine_val
+
     amplitude, phase = cmath.polar(complex_value)
 
     if returned_value == "amplitude":
@@ -84,9 +97,9 @@ def scattering_by_angle(angle_of_observation:float, distance_from_scattering:flo
     elif returned_value == "phase":
         return phase
     elif returned_value == "both":
-        return (amplitude, phase)
+        complex_value
     else:
-        raise ValueError(f"Could not interpret value {returned_value}, use either \"amplitude\" or \"phase\"")
+        raise ValueError(f"Could not interpret the returned value parameter, please, use either \"amplitude\" or \"phase\"")
 
 def scattering_by_space(scattering_point:tuple, observation_point:tuple, wavevector_origin:tuple, observation_time:float, wave_amplitude:float, polarization_of_electric_field="z", returned_value="amplitude") -> float:
     """ Finds the amplitude of Thomson scattering based on several points
@@ -162,11 +175,30 @@ def scattering_by_space(scattering_point:tuple, observation_point:tuple, wavevec
     return scattering_by_angle(angle_of_observation=respective_angle, distance_from_scattering=distance_from_scattering, observation_time=observation_time,
     wavelength=wavelength, wave_amplitude=wave_amplitude, returned_value=returned_value)
 
+def charge_distribution(distance_from_atom, electron_shell):
+    #for testing, all units are in angstromf
+    electron_distances = [0.2, 1.6]
+    electron_distance = electron_distances[electron_shell]
+    nominator = (1.60217663e-19) ** -(2*distance_from_atom / electron_distance)
+    denominator = np.pi * electron_distance**3
+    return nominator/denominator
+
+@njit()
+def integrable_function(angle_of_observation, distance_of_observation, incident_field_strength=1, wavelength=1, observation_time=0, returned_value="phase"):
+    spherical_integral_conversion = distance_of_observation**2 * np.sin(angle_of_observation)
+    return scattering_by_angle(angle_of_observation, distance_of_observation, observation_time, wavelength, incident_field_strength, returned_value=returned_value) * spherical_integral_conversion
+
+def scattering_from_atom(incident_field_strength, wavelength, observation_time, returned_value):
+    integrated_value, err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(incident_field_strength, wavelength, observation_time))
+    return integrated_value * np.pi * 2
+
 if __name__ == "__main__":
     """ This script is not really meant to be ran on it's own - this bit of code just allows you to graph different variables of the function
-    for the purpose of debugging.
+    for the purpose of debugging."""
     
-    Note that this does require matplotlib to be installed, which is not listed in the requirements.txt file """
-    
-    function = lambda x: scattering_by_angle(angle_of_observation = np.pi*1, distance_from_scattering=5, observation_time=x, wavelength=10000000, wave_amplitude=1, returned_value="phase")
-    graph_function(function, min=0.1, max=100, num_samples=100000)
+    # function = lambda x: scattering_by_angle(angle_of_observation = np.pi*1, distance_from_scattering=5, observation_time=x, wavelength=10000000, wave_amplitude=1, returned_value="phase")
+    # graph_function(function, min=0.1, max=100, num_samples=100000)
+
+    # graph_function(lambda x: scattering_from_atom(1, 1, x, "phase"), min=0.01, max=0.3, num_samples=200)
+
+    #print(scattering_from_atom(1, 1, 4, "phase"))  

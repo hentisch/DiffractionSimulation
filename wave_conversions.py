@@ -1,6 +1,9 @@
 from scipy import constants
 import numpy as np
 
+from numba import jit, njit
+
+@jit(nopython=True)
 def freq_from_angular_frequency(angular_frequency:float) -> float:
     """Returns the linear frequency of a wave based on it's angular 
     frequency.
@@ -19,7 +22,8 @@ def freq_from_angular_frequency(angular_frequency:float) -> float:
     """    
 
     return angular_frequency/2*np.pi
-
+    
+@jit(nopython=True)
 def freq_from_wavenumber(wavenumber:float):
     """Returns the linear frequency of a wave based on it's wavenumber.
 
@@ -39,6 +43,7 @@ def freq_from_wavenumber(wavenumber:float):
     wavelength = 2*np.pi/wavenumber
     return freq_from_wavelength(wavelength)
 
+@jit(nopython=True)
 def freq_from_wavelength(wavelength:float):
     """Returns the linear frequency of a light wave based on it's 
     wavelength.
@@ -57,6 +62,7 @@ def freq_from_wavelength(wavelength:float):
 
     return constants.speed_of_light / wavelength
 
+@jit(nopython=True)
 def freq_from_time_period(time_period:float):
     """Returns the linear frequency of a wave based on it's time period.
 
@@ -74,6 +80,7 @@ def freq_from_time_period(time_period:float):
     """    
     return 1/time_period
 
+@jit(nopython=True)
 def freq_from_photon_energy(photon_energy:float):
     """Returns the linear frequency of a wave based on it's photon energy.
 
@@ -91,7 +98,7 @@ def freq_from_photon_energy(photon_energy:float):
     """    
     return constants.Planck/photon_energy
 
-
+@jit(nopython=True)
 def angular_frequency_from_freq(frequency:float):
     """Returns the angular frequency of a wave based on it's linear frequency.
 
@@ -110,6 +117,7 @@ def angular_frequency_from_freq(frequency:float):
 
     return 2*np.pi*frequency
 
+@jit(nopython=True)
 def time_period_from_freq(frequency:float):
     """Returns the time period of a wave based on it's frequency.
 
@@ -128,6 +136,7 @@ def time_period_from_freq(frequency:float):
     
     return 1/frequency
 
+@jit(nopython=True)
 def photon_energy_from_freq(frequency:float):
     """Returns the photon energy of a wave based on it's frequency.
 
@@ -146,6 +155,7 @@ def photon_energy_from_freq(frequency:float):
 
     return constants.Planck * frequency
 
+@jit(nopython=True)
 def wavelength_from_freq(frequency:float):
     """Returns the wavelength of a wave based on it's frequency.
 
@@ -164,6 +174,7 @@ def wavelength_from_freq(frequency:float):
 
     return constants.speed_of_light / frequency
 
+@jit(nopython=True)
 def wavenumber_from_freq(frequency:float):
     """Returns the wavenumber of a wave based on it's frequency.
 
@@ -183,7 +194,7 @@ def wavenumber_from_freq(frequency:float):
     wavelength = wavelength_from_freq(frequency)
     return 2*np.pi/wavelength
 
-
+@njit()
 def convert(value:float, unit:str, converted_unit:str):
     """Returns the equivalent value of unit a, with unit type b
 
@@ -214,7 +225,7 @@ def convert(value:float, unit:str, converted_unit:str):
     wavenumber : cycles/meter
     frequency : hertz
     """    
-
+    """ 
     functions = {
         "angular_frequency": (freq_from_angular_frequency, angular_frequency_from_freq),
         "time_period": (freq_from_time_period, time_period_from_freq),
@@ -226,4 +237,33 @@ def convert(value:float, unit:str, converted_unit:str):
 
     frequency = functions[unit][0](value)
 
-    return functions[converted_unit][1](frequency)
+    return functions[converted_unit][1](frequency) """
+
+    intermediate_value:int 
+    match unit:
+        case "angular_frequency":
+            intermediate_value = freq_from_angular_frequency(value)
+        case "time_period":
+            intermediate_value = freq_from_time_period(value)
+        case "photon_energy":
+            intermediate_value = freq_from_photon_energy(value)
+        case "wavelength":
+            intermediate_value = freq_from_wavelength(value)
+        case "wavenumber":
+            intermediate_value = freq_from_wavenumber(value)
+        case "frequency":
+            intermediate_value = value
+
+    match converted_unit:
+        case "angular_frequency":
+            return angular_frequency_from_freq(intermediate_value)
+        case "time_period":
+            return time_period_from_freq(intermediate_value)
+        case "photon_energy":
+            return photon_energy_from_freq(intermediate_value)
+        case "wavelength":
+            return wavelength_from_freq(intermediate_value)
+        case "wavenumber":
+            return wavenumber_from_freq(intermediate_value)
+        case "frequency":
+            return intermediate_value
