@@ -9,6 +9,11 @@ import wave_conversions as wc
 class Wave:
     def plot(self, num_samples, color, max, min=0):
         u.add_graph_to_plot(self, min, max, num_samples=num_samples, color=color)
+    
+    def get_y_values(self, x_values:np.array):
+        x_values = np.zeros(x_values.shape)
+
+        return [self(x) for x in x_values]
 
 
 class ComponentWave(Wave):
@@ -60,15 +65,65 @@ class WavePlot:
 
     colors = ["red", "green", "blue", "orange", "black"]
 
-    def __init__(self, waves:list[ComponentWave], max:float, num_samples:float) -> None:
-        for i, wave in enumerate(waves):
-            wave.plot(num_samples, self.colors[i%len(self.colors)], max)
-            
+    def __init__(self, component_waves:list[ComponentWave], composite_wave:CompositeWave, max:float, num_samples:float) -> None:
+        self.component_waves = component_waves
+        self.composite_wave = composite_wave
+        self.all_waves = component_waves + [composite_wave]
+
+        self.max = max
+        self.num_samples = num_samples
+
+        self.wave_lines = []
+    
+    def plot(self):
+        fig, ax = plt.subplots()
+        for i, wave in enumerate(self.all_waves):
+            x_values = np.linspace(0, self.max, self.num_samples)
+            y_values = [wave(x) for x in x_values]
+            self.wave_lines.append(plt.plot(x_values, y_values, color=self.colors[i%len(self.colors)]))
+
+        plt.subplots_adjust(left=0.5, bottom=0.5)
+
+        # wave_a_shift = plt.axes([0.1, 0.1, 0.03, 1])
+        wave_a_shift = plt.axes([0.25, 0.2, 0.65, 0.03])
+        wave_a_shift_slider = plt.Slider(
+            ax=wave_a_shift, 
+            label="Wave A Phase shift",
+            valmin=0,
+            valmax=2,
+            valinit=0
+        )
+
+        wave_a_wavelength = plt.axes([0.25, 0.1, 0.65, 0.03])
+        wave_a_wavelength_slider = plt.Slider(
+            ax=wave_a_wavelength,
+            label="Wave A Wavelength",
+            valmin=0,
+            valmax=10,
+            valinit=0
+        )
+        wave_a_wavelength_slider.on_changed(lambda x: self.update_wavelength(self.component_waves[0], wave_a_shift_slider.val))
+        plt.show()
+
+    def update_wavelength(self, wave, new_wavelength:float, fig):
+        wave.wavelength  = new_wavelength
+        self.update_plot(fig)
+
+    def update_shift(self, wave, shift:float, fig):
+        wave.added_phase = shift
+        self.update_plot(fig)
+
+    def update_plot(self, fig):
+        x_values = np.linspace(0, self.max, self.num_samples)
+        for i, line in enumerate(self.wave_lines):
+            line.set_ydata(self.all_waves[i].get_y_values(x_values))
+        fig.canvas.draw_idle()
+        
 
 w = ComponentWave(1, 0)
 a = ComponentWave(2, np.pi)
 w_a = w+a
 
-n = WavePlot([w, a, w_a], 5, 1000)
+n = WavePlot([w, a], w_a, 10, 1000)
 
-plt.show()
+n.plot()
