@@ -3,7 +3,7 @@ PyQt5
 
 matplotlib
 
-numpy
+numpy==1.22
 numba 
 
 scipy
