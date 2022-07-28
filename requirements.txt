@@ -4,5 +4,7 @@ PyQt5
 matplotlib
 
 numpy
+numba 
+
 scipy
 astropy
