@@ -160,10 +160,10 @@ def angle_between_points(point_a:tuple, point_b:tuple):
     float
         The angle between 'point_a', and 'point_b', in radians.
     """    
-    
+    """ 
     adjacent_len = point_b[0] - point_a[0]
     hypotenuse_len = math.dist(point_a, point_b)
-    return np.arccos(adjacent_len/hypotenuse_len)
+    return np.arccos(adjacent_len/hypotenuse_len) """
 
 def angle_between_3d_points(point_a:tuple, point_b:tuple):
 
@@ -209,6 +209,18 @@ def angle_between_lines(line_a, line_b):
     """    
     difference_in_angles = np.arctan(get_slope(line_a) - get_slope(line_b))
     return np.pi - abs(difference_in_angles)
+    
+"""     point_a_np = np.array(line_a)
+    point_b_np = np.array(line_b)
+
+    point_a_mag = math.dist(*line_a)
+    point_b_mag = math.dist(*line_b)
+
+    dot_product = np.dot(point_a_np[1], point_b_np[1])
+    dot_product /= point_a_mag
+    dot_product /= point_b_mag
+
+    return np.arccos(dot_product) """
 
 def get_xy_tuple(coordinates:np.array) -> tuple:
     """Return the x, y coordinates of a np.array of x, y, and z points
