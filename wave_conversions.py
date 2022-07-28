@@ -196,84 +196,37 @@ def wavenumber_from_freq(frequency:float):
     wavelength = wavelength_from_freq(frequency)
     return 2*np.pi/wavelength
 
-if sys.version_info[1] >= 10:
-    @njit()
-    def convert(value:float, unit:str, converted_unit:str):
-        """Returns the equivalent value of unit a, with unit type b
-
-        Parameters
-        ----------
-        value : float
-            The value of the unit you are trying to convert
-        unit : {"angular_frequency", "time_period", "photon_energy", "wavelength", "wavenumber", "frequency"}
-            The unit of 'value'
-        converted_unit : {"angular_frequency", "time_period", "photon_energy", "wavelength", "wavenumber", "frequency"}
-            The unit you would like to convert 'value' to 
-
-        Returns
-        -------
-        float
-            'value', converted to 'converted_unit'
-        
-        Note
-        ----
-        When passing a value, make sure to use the respective base SI unit. 
-        For reference, these are the base SI units for all of the units this
-        function supports.
-
-        angular frequency : radians/seconds,
-        time period : seconds
-        photon energy : joules
-        wavelength : meters
-        wavenumber : cycles/meter
-        frequency : hertz
-        """    
-        """ 
-        functions = {
-            "angular_frequency": (freq_from_angular_frequency, angular_frequency_from_freq),
-            "time_period": (freq_from_time_period, time_period_from_freq),
-            "photon_energy": (freq_from_photon_energy, photon_energy_from_freq),
-            "wavelength": (freq_from_wavelength, wavelength_from_freq),
-            "wavenumber": (freq_from_wavenumber, wavenumber_from_freq),
-            "frequency": (lambda x: x, lambda x: x)
-        }
-
-        frequency = functions[unit][0](value)
-
-        return functions[converted_unit][1](frequency) """
-
-        intermediate_value:int 
-        match unit:
-            case "angular_frequency":
-                intermediate_value = freq_from_angular_frequency(value)
-            case "time_period":
-                intermediate_value = freq_from_time_period(value)
-            case "photon_energy":
-                intermediate_value = freq_from_photon_energy(value)
-            case "wavelength":
-                intermediate_value = freq_from_wavelength(value)
-            case "wavenumber":
-                intermediate_value = freq_from_wavenumber(value)
-            case "frequency":
-                intermediate_value = value
-
-        match converted_unit:
-            case "angular_frequency":
-                return angular_frequency_from_freq(intermediate_value)
-            case "time_period":
-                return time_period_from_freq(intermediate_value)
-            case "photon_energy":
-                return photon_energy_from_freq(intermediate_value)
-            case "wavelength":
-                return wavelength_from_freq(intermediate_value)
-            case "wavenumber":
-                return wavenumber_from_freq(intermediate_value)
-            case "frequency":
-                return intermediate_value
-
 @njit()
-def slow_convert(value:float, unit:str, converted_unit:str):
+def convert(value:float, unit:str, converted_unit:str):
+    """Returns the equivalent value of unit a, with unit type b
 
+    Parameters
+    ----------
+    value : float
+        The value of the unit you are trying to convert
+    unit : {"angular_frequency", "time_period", "photon_energy", "wavelength", "wavenumber", "frequency"}
+        The unit of 'value'
+    converted_unit : {"angular_frequency", "time_period", "photon_energy", "wavelength", "wavenumber", "frequency"}
+        The unit you would like to convert 'value' to 
+
+    Returns
+    -------
+    float
+        'value', converted to 'converted_unit'
+    
+    Note
+    ----
+    When passing a value, make sure to use the respective base SI unit. 
+    For reference, these are the base SI units for all of the units this
+    function supports.
+
+    angular frequency : radians/seconds,
+    time period : seconds
+    photon energy : joules
+    wavelength : meters
+    wavenumber : cycles/meter
+    frequency : hertz
+    """    
     intermediate_value:int 
 
     if unit == "angular_frequency":
