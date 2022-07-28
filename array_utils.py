@@ -98,7 +98,6 @@ def get_different_index(arr_a, arr_b, check_single_difference=False) -> int:
     if check_single_difference:
         num_diff = num_differences(arr_a, arr_b)
         assert num_diff == 1, f"There are a total of {num_diff} indices different between the two arrays, there should only be one"
-        return
     
     for i, e in enumerate(arr_a):
         if arr_b[i] != e:
@@ -151,4 +150,8 @@ def fill_skipping(arr, values, indices):
     
     return new_arr
 
-print(fill_skipping((1, 2, 3), (9, 9), (1,)))
+def multiply_by_scalar(arr, scalar):
+    products = []
+    for element in arr:
+        products.append(element*scalar)
+    return products
