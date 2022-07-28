@@ -81,12 +81,12 @@ def scattering_by_angle(angle_of_observation:float, distance_from_scattering:flo
 
     oscillatory_multiplicand = -thomson_scattering_length*wave_amplitude
     
-    oscillatory_wave_value = np.exp(1j * (wc.convert(wavelength, "wavelength", "wavenumber")*distance_from_scattering - wc.convert(wavelength, "wavelength", "angular_frequency")*observation_time) ) / distance_from_scattering
+    oscillatory_wave_value = np.exp(1j * (wc.slow_convert(wavelength, "wavelength", "wavenumber")*distance_from_scattering - wc.slow_convert(wavelength, "wavelength", "angular_frequency")*observation_time) ) / distance_from_scattering
 
     cosine_val = np.cos(angle_of_observation)
 
-    if round_cos:
-        cosine_val = round(cosine_val)
+  #  if round_cos:
+  #      cosine_val = np.round(cosine_val, 5)
 
     complex_value = oscillatory_multiplicand * oscillatory_wave_value  * cosine_val
 
@@ -196,9 +196,13 @@ if __name__ == "__main__":
     """ This script is not really meant to be ran on it's own - this bit of code just allows you to graph different variables of the function
     for the purpose of debugging."""
     
-    # function = lambda x: scattering_by_angle(angle_of_observation = np.pi*1, distance_from_scattering=5, observation_time=x, wavelength=10000000, wave_amplitude=1, returned_value="phase")
+    # function = lambda x: scattering_by_angle(angle_of_observation = np.pi*1, distance_from_scattering=5, observation_time=x, wavelength=10000000000, wave_amplitude=1, returned_value="phase")
     # graph_function(function, min=0.1, max=100, num_samples=100000)
 
-    # graph_function(lambda x: scattering_from_atom(1, 1, x, "phase"), min=0.01, max=0.3, num_samples=200)
+    # graph_function(lambda x: scattering_from_atom(1, 1, x, "phase"), min=0.01, max=0.3, num_samples=10)
+
+    for i in range(10):
+        values = np.random.randint(0, 100, (3,))
+        scattering_from_atom(*values, "phase")
 
     #print(scattering_from_atom(1, 1, 4, "phase"))  
