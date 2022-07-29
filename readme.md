@@ -38,8 +38,12 @@ X-ray crystallography is an extraordinarily important set of techniques for unde
 
 This program acts as a pedagogical tool to visualize this diffraction.
 
-Braggs:
------------------------
+Description of Science
+----------------------
+
+    Thomson Scattering
+    ------------------
+    
 
 
 Pheonomena Demonstrated:
@@ -48,4 +52,4 @@ Pheonomena Demonstrated:
 
 Contributing:
 --------------
-If there is a bug or inaccuracy you would like to fix, feel free to send a pull request. 
+If there is a bug or inaccuracy you would like to fix, feel free to send a pull request. For larger contributions, it is a good idea to create a new issue to discuss the changes you would like to make before you spend a lot of time implementing them.
