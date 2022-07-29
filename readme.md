@@ -1,6 +1,11 @@
 # DiffractionSimulation
 DiffractionSimulation is a simulation of X-Ray diffraction from a crystal lattice. 
 
+## High Level Overview
+-------------------
+X-ray crystallography is an extraordinarily important set of techniques for understanding the atomic properties of matter. A lot of this relies on Bragg's law. This is shown in more detail in the next section, but you can think of it as saying that given a crystal lattice with a certain distance between atoms, you can predict the angle at which a beam of light will need to shine onto your crystals for the light diffracted by different atoms to constructively interfere. 
+
+This program acts as a pedagogical tool to visualize this diffraction.
 
 ## Installation:
 ------------
@@ -23,7 +28,6 @@ Now that you have created your virtual envionrment, you will want to install the
 pip install -r requirements.txt
 ```
 
-
 ## Usage:
 ---------
 To run the program, follow the installation steps above, then run
@@ -31,12 +35,6 @@ To run the program, follow the installation steps above, then run
 python3 main.py
 ```
 while in the directory you cloned earlier. 
-
-## High Level Overview
--------------------
-X-ray crystallography is an extraordinarily important set of techniques for understanding the atomic properties of matter. A lot of this relies on Bragg's law. This is shown in more detail in the next section, but you can think of it as saying that given a crystal lattice with a certain distance between atoms, you can predict the angle at which a beam of light will need to shine onto your crystals for the light diffracted by different atoms to constructively interfere. 
-
-This program acts as a pedagogical tool to visualize this diffraction.
 
 
 ## Contributing:
