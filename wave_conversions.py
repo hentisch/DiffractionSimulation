@@ -241,6 +241,8 @@ def convert(value:float, unit:str, converted_unit:str):
         intermediate_value = freq_from_wavenumber(value)
     elif unit ==  "frequency":
         intermediate_value = value
+    else:
+        raise ValueError("Could not interpret the passed unit")
 
     if converted_unit == "angular_frequency":
         return angular_frequency_from_freq(intermediate_value)
@@ -254,3 +256,5 @@ def convert(value:float, unit:str, converted_unit:str):
         return wavenumber_from_freq(intermediate_value)
     elif converted_unit == "frequency":
         return intermediate_value
+    else:
+        raise ValueError("Could not interpret the passed unit to convert to")
