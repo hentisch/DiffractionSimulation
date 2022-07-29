@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
+from mayavi import mlab
+
 import numpy as np
+
 
 def rgb_to_mayavi(r:int, g:int, b:int) -> tuple:
     """Returns the passed integer R, G, and B values as a tuple of floats
@@ -71,3 +74,19 @@ def graph_function(func:'function', min:float, max:float, num_samples:int, title
         plt.ylabel(y_label)
 
     plt.show()
+
+def graph_3d_function(func, min:float, max:float, num_side_points:float, x_label:str="X", y_label:str="Y", z_label:str="Z"):
+    evenly_spaced_arr = np.linspace(min, max, num_side_points)
+    z_points = np.zeros((num_side_points, num_side_points))
+    #The rows of the matrix will represent our y cord, and the collumns 
+    #the x coordinates
+    for y_i, row in enumerate(z_points):
+        for x_i, element in enumerate(row):
+            z_points[y_i][x_i] = func(evenly_spaced_arr[x_i], evenly_spaced_arr[y_i])
+
+    print(z_points.shape)
+    mlab.surf(z_points, warp_scale='auto')
+    mlab.axes(xlabel=x_label, ylabel=y_label, zlabel=z_label)
+    mlab.show()
+
+# graph_3d_function(lambda x, y: np.cos(x)*np.cos(y), 1, 10, 50)
