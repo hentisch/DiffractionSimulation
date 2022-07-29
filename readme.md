@@ -36,6 +36,8 @@ python3 main.py
 ```
 while in the directory you cloned earlier. 
 
+## The Science:
+Fill this with more details about the pedagogical material of this project
 
 ## Contributing:
 If there is a bug or inaccuracy you would like to fix, feel free to send a pull request. For larger contributions, it is a good idea to create a new issue to discuss the changes you would like to make before you spend a lot of time implementing them.
