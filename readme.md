@@ -63,7 +63,7 @@ $\psi$ is the angle at which the scattering is observed, relitive to the plane o
 
 
 From an atom, the equation is 
-$$ E_{rad} = 2 \pi  \int_{R=0}^{R=\infin} \int_{\psi = 0}^{\psi = \pi} \frac{e^{ikR}}{R} (R^2 sin \psi) drd\psi$$
+$$ E_{rad} = 2 \pi  \int_{R=0}^{R=\infin} \int_{\psi = 0}^{\psi = \pi} \frac{e^{ikR}}{R} (R^2 sin \psi) drd\psi $$
 
 With the same variale definitions as before .
 ## Pheonomena Demonstrated:
