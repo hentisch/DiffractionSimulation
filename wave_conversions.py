@@ -237,7 +237,7 @@ def convert(value:float, unit:str, converted_unit:str):
         intermediate_value = freq_from_photon_energy(value)
     elif unit ==  "wavelength":
         intermediate_value = freq_from_wavelength(value)
-    elif unit == "wavenumbe":
+    elif unit == "wavenumber":
         intermediate_value = freq_from_wavenumber(value)
     elif unit ==  "frequency":
         intermediate_value = value
