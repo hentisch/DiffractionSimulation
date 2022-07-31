@@ -5,7 +5,7 @@ DiffractionSimulation is a simulation of X-Ray diffraction from a crystal lattic
 -------------------
 X-ray crystallography is an extraordinarily important set of techniques for understanding the atomic properties of matter. A lot of this relies on Bragg's law. This is shown in more detail in the next section, but you can think of it as saying that given a crystal lattice with a certain distance between atoms, you can predict the angle at which a beam of light will need to shine onto your crystals for the light diffracted by different atoms to constructively interfere. 
 
-This program acts as a pedagogical tool to visualize this diffraction.
+This program acts as a pedagogical tool to visualize this diffraction and it's components.
 
 ## Installation:
 ------------
@@ -41,3 +41,6 @@ Fill this with more details about the pedagogical material of this project
 
 ## Contributing:
 If there is a bug or inaccuracy you would like to fix, feel free to send a pull request. For larger contributions, it is a good idea to create a new issue to discuss the changes you would like to make before you spend a lot of time implementing them.
+
+## Acknowledgements:
+This program was written primarily by myself, Henry Tischler, during the course of the summer 2022 Institute for Computing in Research internship program. However, it would be unfair not to give acknowledgemt to the following 
