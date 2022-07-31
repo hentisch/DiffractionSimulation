@@ -2,6 +2,7 @@ import numpy as np
 import math
 
 from array_utils import exclude_indices, get_indices, fill_skipping
+from utils import rgb_to_mayavi
 
 def midpoint_formula(point_a:'tuple[int, int]', point_b:'tuple[int, int]') -> 'tuple[int, int]':
     """ An implementation of the midpoint formula in 2d.
@@ -160,10 +161,10 @@ def angle_between_points(point_a:tuple, point_b:tuple):
     float
         The angle between 'point_a', and 'point_b', in radians.
     """    
-    """ 
+    
     adjacent_len = point_b[0] - point_a[0]
     hypotenuse_len = math.dist(point_a, point_b)
-    return np.arccos(adjacent_len/hypotenuse_len) """
+    return np.arccos(adjacent_len/hypotenuse_len) 
 
 def angle_between_3d_points(point_a:tuple, point_b:tuple):
 
@@ -236,3 +237,25 @@ def get_xy_tuple(coordinates:np.array) -> tuple:
         The x, y coordinates of the passed 3d coordinates
     """    
     return (coordinates[0], coordinates[1])
+
+def get_3d_cos_wave(len:float, num_points:int, amplitude:float, wavelength:float):
+    from mayavi import mlab
+    x_points = np.linspace(0, len, num_points)
+    all_points = np.zeros((num_points, 3))
+
+    all_points[:,0] = np.full((num_points,), 0)
+    all_points[:,1] = x_points
+    all_points[:,2] = np.sin(((2*np.pi)/wavelength) * x_points) * amplitude
+
+    rotated_points = rotate_3d_points(all_points, np.pi*0.5, 'y', (0, 0, 0))
+
+    mlab.plot3d(all_points[:,0], all_points[:,1], all_points[:,2], color=rgb_to_mayavi(255, 255, 0))
+    mlab.plot3d(rotated_points[:,0], rotated_points[:,1], rotated_points[:,2], color=rgb_to_mayavi(0, 0, 255))
+
+    mlab.pipeline.vectors(mlab.pipeline.vector_scatter(0,0,0,0,len*12,0))
+
+    mlab.show() 
+
+
+
+get_3d_cos_wave(10, 1000, 1, 1)

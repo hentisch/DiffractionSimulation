@@ -89,8 +89,8 @@ def scattering_by_angle(angle_of_observation:float, distance_from_scattering:flo
 
     cosine_val = np.cos(angle_of_observation)
 
-  #  if round_cos:
-  #      cosine_val = np.round(cosine_val, 5)
+    if round_cos:
+        cosine_val = np.round(cosine_val, 5)
 
     if returned_value == "real":
         return oscillatory_multiplicand * real_oscillatory_value  * cosine_val
@@ -216,6 +216,5 @@ if __name__ == "__main__":
     # result, err = integrate.quad(lambda r: charge_distribution(r, 0), 0, 1e-13)
     # print(result)
     # graph_function(lambda x: charge_distribution(x, 0), 1e-13, 1e-11, 1000)
-    graph_function(lambda t: get_phase(1, 1, t), 0, 10, 10000)
     # print(charge_distribution(10, 0))
     # print(result)
