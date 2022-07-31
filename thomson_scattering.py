@@ -1,4 +1,3 @@
-from ast import arg
 from math import atan2, dist
 from random import random
 import numpy as np
@@ -15,7 +14,7 @@ import cmath
 
 from geometry_utils import angle_between_lines, index_by_dimension
 from array_utils import get_different_index, get_indices, num_differences
-from utils import graph_function
+from utils import graph_3d_function, graph_function
 
 from numba import njit
 
@@ -81,14 +80,25 @@ def scattering_by_angle(angle_of_observation:float, distance_from_scattering:flo
 
     oscillatory_multiplicand = -thomson_scattering_length*wave_amplitude
     
-    oscillatory_wave_value = np.exp(1j * (wc.slow_convert(wavelength, "wavelength", "wavenumber")*distance_from_scattering - wc.slow_convert(wavelength, "wavelength", "angular_frequency")*observation_time) ) / distance_from_scattering
+    wavenumber = wc.convert(wavelength, "wavelength", "wavenumber")
+    angular_frequency = wc.convert(wavelength, "wavelength", "angular_frequency")
+
+    thing = wavenumber*distance_from_scattering - angular_frequency*observation_time
+
+    real_oscillatory_value = np.cos(thing) + np.sin(thing)
 
     cosine_val = np.cos(angle_of_observation)
 
   #  if round_cos:
   #      cosine_val = np.round(cosine_val, 5)
 
-    complex_value = oscillatory_multiplicand * oscillatory_wave_value  * cosine_val
+    if returned_value == "real":
+        return oscillatory_multiplicand * real_oscillatory_value  * cosine_val
+    else:
+        complex_value = oscillatory_multiplicand * real_oscillatory_value * 1j * cosine_val
+
+    if returned_value == "imaginary":
+        return complex_value.imag
 
     amplitude, phase = cmath.polar(complex_value)
 
@@ -176,33 +186,36 @@ def scattering_by_space(scattering_point:tuple, observation_point:tuple, wavevec
     wavelength=wavelength, wave_amplitude=wave_amplitude, returned_value=returned_value)
 
 def charge_distribution(distance_from_atom, electron_shell):
-    #for testing, all units are in angstromf
-    electron_distances = [0.2, 1.6]
+    #To prevent overflow errors, this method represents values
+    #internally as nanometers
+    electron_distances = [x/1e-9 for x in [2e-11, 1.6e-10]]
     electron_distance = electron_distances[electron_shell]
-    nominator = (1.60217663e-19) ** -(2*distance_from_atom / electron_distance)
+
+    distance_from_atom /= 1e-9
+
+    nominator = np.exp(-(2*distance_from_atom / electron_distance))
     denominator = np.pi * electron_distance**3
-    return nominator/denominator
+    return nominator/denominator * 1e-9
 
 @njit()
-def integrable_function(angle_of_observation, distance_of_observation, incident_field_strength=1, wavelength=1, observation_time=0, returned_value="phase"):
+def integrable_function(angle_of_observation, distance_of_observation, incident_field_strength=1, wavelength=1, observation_time=0, returned_value="amplitude"):
     spherical_integral_conversion = distance_of_observation**2 * np.sin(angle_of_observation)
     return scattering_by_angle(angle_of_observation, distance_of_observation, observation_time, wavelength, incident_field_strength, returned_value=returned_value) * spherical_integral_conversion
 
-def scattering_from_atom(incident_field_strength, wavelength, observation_time, returned_value):
-    integrated_value, err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(incident_field_strength, wavelength, observation_time))
+def scattering_from_atom(incident_field_strength, wavelength, observation_time, returned_value="amplitude"):
+    integrated_value, err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(incident_field_strength, wavelength, observation_time, returned_value))
     return integrated_value * np.pi * 2
-
+    
 if __name__ == "__main__":
     """ This script is not really meant to be ran on it's own - this bit of code just allows you to graph different variables of the function
     for the purpose of debugging."""
     
-    # function = lambda x: scattering_by_angle(angle_of_observation = np.pi*1, distance_from_scattering=5, observation_time=x, wavelength=10000000000, wave_amplitude=1, returned_value="phase")
-    # graph_function(function, min=0.1, max=100, num_samples=100000)
+    # graph_3d_function(lambda angle, dist: scattering_by_angle(angle, dist, 1, 1, 1, "phase"), 0.1, 10, 300, "angle", "distance from observation", "phase")
+    # graph_3d_function(lambda angle, dist: scattering_by_angle(angle, dist, 1, 1, 1, "amplitude"), 0.1, 10, 300, "angle", "distance from observation", "amplitude")
 
-    # graph_function(lambda x: scattering_from_atom(1, 1, x, "phase"), min=0.01, max=0.3, num_samples=10)
-
-    for i in range(10):
-        values = np.random.randint(0, 100, (3,))
-        scattering_from_atom(*values, "phase")
-
-    #print(scattering_from_atom(1, 1, 4, "phase"))  
+    # result, err = integrate.quad(lambda r: charge_distribution(r, 0), 0, 1e-13)
+    # print(result)
+    # graph_function(lambda x: charge_distribution(x, 0), 1e-13, 1e-11, 1000)
+    graph_function(lambda t: get_phase(1, 1, t), 0, 10, 10000)
+    # print(charge_distribution(10, 0))
+    # print(result)
