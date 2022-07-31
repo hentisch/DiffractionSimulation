@@ -88,5 +88,3 @@ def graph_3d_function(func, min:float, max:float, num_side_points:float, x_label
     mlab.surf(z_points, warp_scale='auto')
     mlab.axes(xlabel=x_label, ylabel=y_label, zlabel=z_label)
     mlab.show()
-
-# graph_3d_function(lambda x, y: np.cos(x)*np.cos(y), 1, 10, 50)
