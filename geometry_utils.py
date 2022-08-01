@@ -252,10 +252,4 @@ def get_3d_cos_wave(len:float, num_points:int, amplitude:float, wavelength:float
     mlab.plot3d(all_points[:,0], all_points[:,1], all_points[:,2], color=rgb_to_mayavi(255, 255, 0))
     mlab.plot3d(rotated_points[:,0], rotated_points[:,1], rotated_points[:,2], color=rgb_to_mayavi(0, 0, 255))
 
-    mlab.pipeline.vectors(mlab.pipeline.vector_scatter(0,0,0,0,len*12,0))
-
     mlab.show() 
-
-
-
-get_3d_cos_wave(10, 1000, 1, 1)
