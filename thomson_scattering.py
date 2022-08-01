@@ -14,7 +14,7 @@ import cmath
 
 from geometry_utils import angle_between_lines, index_by_dimension
 from array_utils import get_different_index, get_indices, num_differences
-from utils import graph_3d_function, graph_function
+from utils import graph_3d_function, graph_function, integrate_function_simpson
 
 from numba import njit
 
@@ -187,30 +187,35 @@ def scattering_by_space(scattering_point:tuple, observation_point:tuple, wavevec
     return scattering_by_angle(angle_of_observation=respective_angle, distance_from_scattering=distance_from_scattering, observation_time=observation_time,
     wavelength=wavelength, wave_amplitude=wave_amplitude, returned_value=returned_value)
 
-def charge_distribution(distance_from_atom, electron_shell):
+@njit()
+def charge_probability(distance_from_atom, electron_shell:str):
     #To prevent overflow errors, this method represents values
     #internally as nanometers
-    electron_distances = [x/1e-9 for x in [2e-11, 1.6e-10]]
-    electron_distance = electron_distances[electron_shell]
-
-    distance_from_atom /= 1e-9
+    if electron_shell == 'k':
+        electron_distance = 2e-11
+    elif electron_shell == 'l':
+        electron_distance = 1.6e-10
+    else:
+        raise ValueError("Could not understand electron shell argument, please use either k or l")
 
     nominator = np.exp(-(2*distance_from_atom / electron_distance))
     denominator = np.pi * electron_distance**3
-    return nominator/denominator * 1e-9
+    return nominator/denominator
 
 @njit()
-def integrable_function(angle_of_observation, distance_of_observation, incident_field_strength=1, wavelength=1, observation_time=0, returned_value="real"):
+def integrable_function(angle_of_observation, distance_of_observation, incident_field_strength=1, wavelength=1, observation_time=0, electron_shell='k', returned_value="real"):
     spherical_integral_conversion = distance_of_observation**2 * np.sin(angle_of_observation)
-    return scattering_by_angle(angle_of_observation, distance_of_observation, observation_time, wavelength, incident_field_strength, returned_value=returned_value) * spherical_integral_conversion
+    positional_probability = charge_probability(distance_of_observation, electron_shell)
+    return scattering_by_angle(angle_of_observation, distance_of_observation, observation_time, wavelength, incident_field_strength, returned_value=returned_value) * spherical_integral_conversion * positional_probability
 
-def scattering_from_atom(incident_field_strength, wavelength, observation_time):
-    real_integral, real_err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(incident_field_strength, wavelength, observation_time, "real"))
-    imaginary_integral, imag_err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(incident_field_strength, wavelength, observation_time, "imaginary"))
+def scattering_from_atom(incident_field_strength, wavelength, observation_time, electron_shell:str='k'):
+    real_integral, real_err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(incident_field_strength, wavelength, observation_time, electron_shell, "real"))
+    imaginary_integral, imag_err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(incident_field_strength, wavelength, observation_time, electron_shell, "imaginary"))
     return real_integral + imaginary_integral*1j
-    
+
 if __name__ == "__main__":
     """ This script is not really meant to be ran on it's own - this bit of code just allows you to graph different variables of the function
     for the purpose of debugging."""
 
-    print(scattering_from_atom(1, 1, 1))
+    # graph_function(lambda x: charge_distribution(x, 'k'), 2e-11, 2e-16, 10000)
+    print(integrate_function_simpson(lambda x: charge_probability(x, 'k'), 2e-11, 2e-16, 100000))
