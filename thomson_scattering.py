@@ -188,7 +188,7 @@ def scattering_by_space(scattering_point:tuple, observation_point:tuple, wavevec
     wavelength=wavelength, wave_amplitude=wave_amplitude, returned_value=returned_value)
 
 @njit()
-def charge_probability(distance_from_atom, electron_shell:str):
+def electron_probability(distance_from_atom, electron_shell:str):
     #To prevent overflow errors, this method represents values
     #internally as nanometers
     if electron_shell == 'k':
@@ -205,7 +205,7 @@ def charge_probability(distance_from_atom, electron_shell:str):
 @njit()
 def integrable_function(angle_of_observation, distance_of_observation, incident_field_strength=1, wavelength=1, observation_time=0, electron_shell='k', returned_value="real"):
     spherical_integral_conversion = distance_of_observation**2 * np.sin(angle_of_observation)
-    positional_probability = charge_probability(distance_of_observation, electron_shell)
+    positional_probability = electron_probability(distance_of_observation, electron_shell)
     return scattering_by_angle(angle_of_observation, distance_of_observation, observation_time, wavelength, incident_field_strength, returned_value=returned_value) * spherical_integral_conversion * positional_probability
 
 def scattering_from_atom(incident_field_strength, wavelength, observation_time, electron_shell:str='k'):
@@ -218,4 +218,4 @@ if __name__ == "__main__":
     for the purpose of debugging."""
 
     # graph_function(lambda x: charge_distribution(x, 'k'), 2e-11, 2e-16, 10000)
-    print(integrate_function_simpson(lambda x: charge_probability(x, 'k'), 2e-11, 2e-16, 100000))
+    print(integrate_function_simpson(lambda x: electron_probability(x, 'k'), 2e-11, 2e-16, 100000))
