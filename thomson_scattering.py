@@ -218,4 +218,4 @@ if __name__ == "__main__":
     for the purpose of debugging."""
 
     # graph_function(lambda x: charge_distribution(x, 'k'), 2e-11, 2e-16, 10000)
-    print(integrate_function_simpson(lambda x: electron_probability(x, 'k'), 2e-11, 2e-16, 100000))
+    print(integrate_function_simpson(lambda x: electron_probability(x, 'k'), 2e-16, 2e-11, 100000))
