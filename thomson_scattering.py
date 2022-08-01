@@ -44,7 +44,7 @@ def scattering_by_angle(angle_of_observation:float, distance_from_scattering:flo
     wave_amplitude : float 
         The strength of the incident electric field. This should be 
         described in volts/meter.
-    returned_value : [{"amplitude", "phase", "both"}, optional]
+    returned_value : [{"real", "imaginary" "amplitude", "phase", "complex"}, optional]
         The part of the scattered wave to be returned
     round_cos : bool
         If True, the cosine value which attenuates the scattering will be
@@ -85,20 +85,22 @@ def scattering_by_angle(angle_of_observation:float, distance_from_scattering:flo
 
     thing = wavenumber*distance_from_scattering - angular_frequency*observation_time
 
-    real_oscillatory_value = np.cos(thing) + np.sin(thing)
+    real_oscillatory_value = np.cos(thing)
+    imaginary_oscilitory_value = np.sin(thing)
 
     cosine_val = np.cos(angle_of_observation)
 
     if round_cos:
         cosine_val = np.round(cosine_val, 5)
 
-    if returned_value == "real":
-        return oscillatory_multiplicand * real_oscillatory_value  * cosine_val
-    else:
-        complex_value = oscillatory_multiplicand * real_oscillatory_value * 1j * cosine_val
+    attenduated_multiplicand = oscillatory_multiplicand * cosine_val
 
-    if returned_value == "imaginary":
-        return complex_value.imag
+    if returned_value == "real":
+        return attenduated_multiplicand * real_oscillatory_value
+    elif returned_value == "imaginary":
+        return attenduated_multiplicand * imaginary_oscilitory_value
+    else:
+        complex_value = attenduated_multiplicand * (real_oscillatory_value + imaginary_oscilitory_value*1j)
 
     amplitude, phase = cmath.polar(complex_value)
 
@@ -106,7 +108,7 @@ def scattering_by_angle(angle_of_observation:float, distance_from_scattering:flo
         return amplitude
     elif returned_value == "phase":
         return phase
-    elif returned_value == "both":
+    elif returned_value == "complex":
         complex_value
     else:
         raise ValueError(f"Could not interpret the returned value parameter, please, use either \"amplitude\" or \"phase\"")
@@ -198,23 +200,17 @@ def charge_distribution(distance_from_atom, electron_shell):
     return nominator/denominator * 1e-9
 
 @njit()
-def integrable_function(angle_of_observation, distance_of_observation, incident_field_strength=1, wavelength=1, observation_time=0, returned_value="amplitude"):
+def integrable_function(angle_of_observation, distance_of_observation, incident_field_strength=1, wavelength=1, observation_time=0, returned_value="real"):
     spherical_integral_conversion = distance_of_observation**2 * np.sin(angle_of_observation)
     return scattering_by_angle(angle_of_observation, distance_of_observation, observation_time, wavelength, incident_field_strength, returned_value=returned_value) * spherical_integral_conversion
 
-def scattering_from_atom(incident_field_strength, wavelength, observation_time, returned_value="amplitude"):
-    integrated_value, err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(incident_field_strength, wavelength, observation_time, returned_value))
-    return integrated_value * np.pi * 2
+def scattering_from_atom(incident_field_strength, wavelength, observation_time):
+    real_integral, real_err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(incident_field_strength, wavelength, observation_time, "real"))
+    imaginary_integral, imag_err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(incident_field_strength, wavelength, observation_time, "imaginary"))
+    return real_integral + imaginary_integral*1j
     
 if __name__ == "__main__":
     """ This script is not really meant to be ran on it's own - this bit of code just allows you to graph different variables of the function
     for the purpose of debugging."""
-    
-    # graph_3d_function(lambda angle, dist: scattering_by_angle(angle, dist, 1, 1, 1, "phase"), 0.1, 10, 300, "angle", "distance from observation", "phase")
-    # graph_3d_function(lambda angle, dist: scattering_by_angle(angle, dist, 1, 1, 1, "amplitude"), 0.1, 10, 300, "angle", "distance from observation", "amplitude")
 
-    # result, err = integrate.quad(lambda r: charge_distribution(r, 0), 0, 1e-13)
-    # print(result)
-    # graph_function(lambda x: charge_distribution(x, 0), 1e-13, 1e-11, 1000)
-    # print(charge_distribution(10, 0))
-    # print(result)
+    print(scattering_from_atom(1, 1, 1))
