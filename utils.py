@@ -3,6 +3,7 @@ from mayavi import mlab
 
 import numpy as np
 
+import scipy.integrate as integrate
 
 def rgb_to_mayavi(r:int, g:int, b:int) -> tuple:
     """Returns the passed integer R, G, and B values as a tuple of floats
@@ -88,3 +89,10 @@ def graph_3d_function(func, min:float, max:float, num_side_points:float, x_label
     mlab.surf(z_points, warp_scale='auto')
     mlab.axes(xlabel=x_label, ylabel=y_label, zlabel=z_label)
     mlab.show()
+
+def integrate_function_simpson(func, min, max, num_samples):
+    x_values = np.linspace(min, max, num_samples)
+    y_values = np.zeros(x_values.shape)
+    for i, x in enumerate(x_values):
+        y_values[i] = func(x)
+    return integrate.simpson(y_values, x=x_values)
