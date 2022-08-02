@@ -1,7 +1,12 @@
-\documentclass{beamer}
+\documentclass[aspectratio=169]{beamer}
 \usetheme{CambridgeUS}
 \usepackage{graphicx}
 \graphicspath{{./images/}}
+
+%\usepackage{caption}
+%\captionsetup[figure]{font=3pt}
+
+\setbeamerfont{caption}{size=\scriptsize}
 
 \title {Simulating and Visualizing X-Ray Diffraction from Crystall Lattices`}
 
@@ -30,8 +35,54 @@
 	\end{itemize}		
 \end{frame}
 
-\begin {frame}
-	\includegraphics[scale=\textwidth]{light_wave}
+\begin {frame}{What is Light?}
+	\includegraphics[width=\textwidth]{/home/henry/DiffractionSimulation/materials/slideshow/images/light.png}
+\end{frame}
+
+
+\begingroup
+\begin{frame}{Wave Interference}
+	\begin{figure}
+		\includegraphics[height= 0.7\textheight]{/home/henry/DiffractionSimulation/materials/slideshow/images/PondWaveInteference.jpg}
+
+	\caption {Destructive Interference Occuring Between two Waves in a Pond}
+	\end{figure}
+
+\end{frame}
+\endgroup
+
+\begin{frame}{Wave interference}
+	When two waves meet, interference occurs.
+	\begin{itemize}
+	\item This interference is just the sum of the two waves.
+	\item This means that when the waves are in phase with eachother, their valleys and peaks will line up, and the waves will constructively interfere.
+	\item When the waves are perfectly out of phase, the valleys of one wave will line up with the peaks of another, and the waves will cancel eachother out.
+	\end{itemize}
+	
+
+\begin{columns}[c]	
+
+	\begin{column}{.5\textwidth}
+		\begin{figure}
+		\includegraphics[height=0.2\textheight]{/home/henry/DiffractionSimulation/materials/slideshow/plots/pi_shifted_matplotlib.png}
+		\caption{Destructive Interference Between Two Sinesoids}
+		\end{figure}
+	\end{column}
+	
+
+	
+	\begin{column}{.5\textwidth}
+		\begin{figure}
+			\includegraphics[height=0.2\textheight]{/home/henry/DiffractionSimulation/materials/slideshow/plots/in_phase_matplotlib.png}
+			\caption{Constructive Interference Between two Sinesoids}
+		\end{figure}
+	\end{column}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Refrences}
+	"Two point source interference Pattern" by Lub0t is licensed under https://creativecommons.org/licenses/by/3.0/
 \end{frame}
 
 \end{document}
