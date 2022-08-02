@@ -1,0 +1,1 @@
+This folder should contain any images used in the slideshow which cannot be programmatically generated (for example, a photograph).
