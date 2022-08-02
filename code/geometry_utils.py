@@ -168,9 +168,11 @@ def angle_between_points(point_a:tuple, point_b:tuple):
 
 def angle_between_3d_points(point_a:tuple, point_b:tuple):
 
-    angle = np.zeros((1, 3))
+    angle = np.zeros((3))
     for i, axis in enumerate(point_a):
-        angle[i] = angle_between_points(axis, point_b[i])
+        point_a_2d = exclude_indices(point_a, (i,))
+        point_b_2d = exclude_indices(point_b, (i,))
+        angle[i] = angle_between_lines(((0, 0), point_a_2d), ((0, 0), point_b_2d))
     
     return angle
 
@@ -238,8 +240,12 @@ def get_xy_tuple(coordinates:np.array) -> tuple:
     """    
     return (coordinates[0], coordinates[1])
 
+def get_2d_points(point:np.array, axis:str):
+    axis_index = index_by_dimension[axis]
+    return exclude_indices(point, (axis_index,))
+
 def get_3d_cos_wave(len:float, num_points:int, amplitude:float, wavelength:float):
-    from mayavi import mlab
+    # from mayavi import mlab
     x_points = np.linspace(0, len, num_points)
     all_points = np.zeros((num_points, 3))
 
@@ -247,9 +253,34 @@ def get_3d_cos_wave(len:float, num_points:int, amplitude:float, wavelength:float
     all_points[:,1] = x_points
     all_points[:,2] = np.sin(((2*np.pi)/wavelength) * x_points) * amplitude
 
-    rotated_points = rotate_3d_points(all_points, np.pi*0.5, 'y', (0, 0, 0))
+    return all_points
 
-    mlab.plot3d(all_points[:,0], all_points[:,1], all_points[:,2], color=rgb_to_mayavi(255, 255, 0))
-    mlab.plot3d(rotated_points[:,0], rotated_points[:,1], rotated_points[:,2], color=rgb_to_mayavi(0, 0, 255))
+    # return rotate_3d_points(all_points, np.pi*0.5, 'y', (0, 0, 0))
 
-    mlab.show() 
+    # mlab.plot3d(all_points[:,0], all_points[:,1], all_points[:,2], color=rgb_to_mayavi(255, 255, 0))
+    # mlab.plot3d(rotated_points[:,0], rotated_points[:,1], rotated_points[:,2], color=rgb_to_mayavi(0, 0, 255))
+
+    # mlab.show() 
+
+def get_3d_cos_wave_between_points(coordinates:float, num_points:int, amplitude:float, wavelength:float):
+    length = math.dist(*coordinates)
+    non_rotated_wave = get_3d_cos_wave(length, num_points, amplitude, wavelength)
+    non_rotated_wave[:,0] += coordinates[0][0]
+    non_rotated_wave[:,1] += coordinates[0][1]
+    non_rotated_wave[:,2] += coordinates[0][2]
+
+    # return non_rotated_wave
+    print(get_2d_points(coordinates[1], "z"))
+    z_angle = -math.atan2(*reversed(get_2d_points(coordinates[1], 'z'))) 
+    rotated_wave = rotate_3d_points(non_rotated_wave, z_angle, 'z', coordinates[0])
+
+    x_angle = -math.atan2(*reversed(get_2d_points(coordinates[1], 'x'))) - math.atan2(*reversed(get_2d_points(coordinates[0], 'x')))
+    rotated_wave = rotate_3d_points(rotated_wave, x_angle, 'x', coordinates[0])
+
+    print(get_2d_points(coordinates[1], 'y'))
+    y_angle = -math.atan2(*reversed(get_2d_points(coordinates[1], 'y'))) - math.atan2(*reversed(get_2d_points(coordinates[1], 'y')))
+    rotated_wave = rotate_3d_points(rotated_wave, x_angle, 'y', coordinates[0])
+
+    return rotated_wave
+    #point_angle = angle_between_3d_points(*coordinates)
+    #return rotate_by_euler(non_rotated_wave, point_angle, coordinates[1])

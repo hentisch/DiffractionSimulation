@@ -1,5 +1,7 @@
 from math import dist
+from matplotlib.pyplot import plot
 import numpy as np
+from geometry_utils import get_3d_cos_wave_between_points
 
 import thomson_scattering as ts
 
@@ -31,6 +33,9 @@ class FieldModel(HasTraits):
         super().__init__()
         self.scene.mayavi_scene #For some reason if we don't access this attribute before using it as a figure it wont work
         self.s = mlab.pipeline.volume(mlab.pipeline.scalar_field(self.get_electric_scalar_field(), figure=self.scene.mayavi_scene))
+
+        wave_points = get_3d_cos_wave_between_points(((plot_size[0]/2, plot_size[1]/2, plot_size[2]/2), (5, 55, 33)), 5000, 1, 1)
+        self.w = mlab.plot3d(wave_points[:,0], wave_points[:,1], wave_points[:,2], figure=self.scene.mayavi_scene)
     
     def get_electric_scalar_field(self):
         atom_point = tuple((length/2)*self.unit_size for length in self.plot_size) #The middle of the plot

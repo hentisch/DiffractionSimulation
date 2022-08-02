@@ -41,7 +41,7 @@ class ComponentWave(Wave):
         return CompositeWave([self, other])
 
 class CompositeWave(Wave):
-    def __init__(self, waves:list[ComponentWave]) -> None:
+    def __init__(self, waves:'list[ComponentWave]') -> None:
         self.waves = list(waves)
         self.wavelength = mean([wave.wavelength for wave in self.waves])
         self.amplitude = mean([wave.amplitude for wave in self.waves])
@@ -72,7 +72,7 @@ class WavePlot:
 
     colors = ["red", "green", "blue", "orange", "black"]
 
-    def __init__(self, component_waves:list[ComponentWave], composite_wave:CompositeWave, max:float, num_samples:float) -> None:
+    def __init__(self, component_waves:'list[ComponentWave]', composite_wave:CompositeWave, max:float, num_samples:float) -> None:
         self.component_waves = component_waves
         self.composite_wave = composite_wave
         self.all_waves = component_waves + [composite_wave]
