@@ -1,0 +1,1 @@
+This folder should contain all programmatically generated plots used in the slideshow. Other imagery should be placed in Images
