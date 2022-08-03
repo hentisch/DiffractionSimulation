@@ -1,6 +1,7 @@
 \documentclass[aspectratio=169]{beamer}
 \usetheme{CambridgeUS}
 \usepackage{graphicx}
+\usepackage{animate}
 \graphicspath{{./images/}{./plots/}}
 
 \setbeamerfont{caption}{size=\tiny}
@@ -15,127 +16,255 @@
 
 \AtBeginSubsection[]
 {
-	\begin{frame}
+	\begin{frame}<beamer>{outline}
 		\tableofcontents[currentsection, currentsubsection]
 	\end{frame}
 }
-
 \begin{document}
-	\titlepage
+\titlepage
 
 
 \begin {frame}{What is Light?}
-	\begin{columns}
-	
+\begin{columns}
+				
 	\begin{column}[b]{.5\textwidth}
-	When you have a changing electric field, a changing magnetic field will be created.
+		When you have a changing electric field, a changing magnetic field will be created.
 		\begin{itemize}
-		\item A changing magnetic field will also create a changing electric field.
-		\item These changing electric fields will form the wave that is light.
+			\item Light is an electromagnetic wave.
+			\item A changing magnetic field will also create a changing electric field.
+			\item These changing electric fields will form the wave that is light.
 		\end{itemize}		
 	\end{column}\
-	
-\begin{column}{.5\textwidth}
+				
+	\begin{column}{.5\textwidth}
 		\begin{figure}
 			\includegraphics[width=0.7\textwidth]{light}
 			\caption{A visualization of a light wave}
 		\end{figure}
 	\end{column}
-	
-	\end{columns}
+				
+\end{columns}
 \end{frame}
 
 \begin{frame}[t]{Thomson Scattering}
-	Becuase light has an electric field, it will "wiggle" a charged particle.
-	
+  Becuase light has an electric field, it will "wiggle" a charged particle.
 	\begin{itemize}
 		\item This wiggling of the electron will create a changing electric field.
 		\item This will create a changing magenetic field, thus forming a new light wave. 
 		\item This forms the phenomenon of Thomson scattering, where light (such as an X-Ray), will be scattered by an electron.
 	\end{itemize}
-	
+				
 \end{frame}
 
 \begin{frame}[t]{Modeling Thomson Scattering}
 	To model Thomson scattering, we can use the following equation:
-	
+				
 	\begin{figure}
 		$$ E_{rad}(R, t) = -E_{x0} {r_0} \frac{e^{i(kR-\omega t)}}{R} cos \psi$$
 		\caption{An equation to model Thomson scattering}
 	\end{figure}
 	
-		{$R$ represents the distance between the point of scattering and the point of observation.
-
-$t$ represents the time of observation.
-
-$e_{x0}$ represents the amplitude of the incident electric field.
-
-$r_0$ represents the classical electron radius, which is about 2.82x10-15 m.
-
-$e$ is Euler's number, and $i$ is the copmlex number.
-
-$k$ is the wavenumber of the incident electric field.}
-
+	\begin{scriptsize}
+		\begin{itemize}
+	\item $R$ represents the distance between the point of scattering and the point of observation.
+						
+	\item $t$ represents the time of observation.
+						
+	\item $e_{x0}$ represents the amplitude of the incident electric field.
+						
+	\item $r_0$ represents the classical electron radius, which is about 2.82x10-15 m.
+						
+	\item $e$ is Euler's number, and $i$ is the copmlex number.
+						
+	\item $k$ is the wavenumber of the incident electric field.
+		\end{itemize}
+	\end{scriptsize}						
 \end{frame}
 	
 \begin{frame}[t]{Eulers Formula}
 	In the Thomson Scattering Equation, $e^{ix}$ represents the incident oscilitory electric field, using Euler's formula.
-	
+				
 	\begin{itemize}
 		\item Eulers formula is defined by the identiy $ e^{ix} = \cos x + i \sin x $
 		\item In the context of our wave, when converted to polar coordinates, the length of the value represents the amplitude of the scattered wave, and the angle represents the phase of the wave
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Breaking down the }
+\begin{frame}[t]{Complex Number Review}
+			
+	\begin{columns}[c]
+							
+		\begin{column}{.5\textwidth}
+			As you are probably aware of, you can describe $\sqrt{-1}$ with the letter $i$
+			\begin{itemize}
+				\item Any number multiplied by $i$ is an imaginary number
+				\item You can combine real numbers and imaginary numbers to form a complex number (for example, 2+3i)
+			\end{itemize}
+		\end{column}
+							
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\includegraphics[height= 0.7\textheight]{complex_plane}
+			\end{figure}
+		\end{column}
+							
+	\end{columns}
+				
+\end{frame}
 
+
+\begin{frame}[t]{Complex Polar Coordinates}
+	
+	\begin{columns}[c]
+		
+		\begin{column}{.5\textwidth}
+			To describe a wave, we can use complex polar coordinates.
+			\begin{itemize}
+				\item With polar coordinates, instead of describing the complex number with cartesian coordinates in an x, y plane (like can be seen in the plot on the previous slide), we describe it with an angle it with an angle and magnitude.
+			\end{itemize}
+		\end{column}
+						
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\includegraphics[height=0.7\textheight]{complex_polar_plane}
+				\caption{A diagram of the complex polar coordinates resulting from Euler's formula.}
+			\end{figure}
+		\end{column}
+				
+	\end{columns}
+						
+\end{frame}
+
+				
+\begin{frame}{Complex Polar Coordinates to describe a wave}
+	\begin{columns}[c]
+		\begin{column}{.5\textwidth}
+			We can use the complex coordinates from Euler's formula to describe a wave
+			\begin{itemize}
+				\item The magnitude of the polar coordinate represents the amplitude of the wave
+				\item The angle of the polar coordinate represents the phase of the wave
+				
+			\end{itemize}
+		\end{column}
+										
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\animategraphics[autoplay,loop,width=\linewidth]{10}{phasor_fig/frame-}{0}{94}	
+				\label{fig:Phasor}	
+				\caption{An animation of a phasor}
+			\end{figure}
+		\end{column}
+	\end{columns}
+									
+\end{frame}
+				
 \begin{frame}[t]{Thomson scattering from an atom}
 	In most cases, we are not interested in the scattering from a single electron, but rather from an atom.
 	
-\end{frame}
+	\begin{itemize}
+		\item To do this, we have to integrate over the area of an electron, while taking into account the probability than an electron as at each point
+	\end{itemize}
+	
+	\begin{figure}
+		$$ E_{rad} = 2 \pi  \int_{R=0}^{R=\infty} \int_{\psi = 0}^{\psi = \pi} f_{Thomson} \times (R, \psi, E_{in}, \lambda) \times p(R) \times (r^2 \sin \psi) dr d\psi$$
+		\caption{An equation to model Thomson Scattering from an atom}
+	\end{figure}		
+	
+	\begin{scriptsize}
+	\begin{itemize}
+		\item $R$ represents the distance from the center of the atom
+		\item $\psi$ repersents the angle at which the scattering is being observed, on the plane of polarization
+		\item $E_{in}$ represents the incident electric field
+		\item $\lambda$ represents the wavelength of the incident light
+	\end{itemize}
+	\end{scriptsize}
+	
+\end{frame}				
+	
+\begin{frame}[t]{Charge Probability Density Function}
+	We, of course, cannot know exactly where an electron is while orbiting an atom.
+	
+	\begin{itemize}
+		\item However, we can have some idea where an electron is likely to be. For example, it is more likely to be 20 picometers from the nuclues, than 20 meters from it.
+		\item In my simulations, the following equation for charge probability density was used. Note that it is a very rough approximation, and many more accurate techniques exist.
+	\end{itemize}
+	
+	\begin{figure}
+		$$ p = \frac{e^{-(2r/a)}}{\pi a^3}$$
+		\caption{A simple charge probability density function}
+	\end{figure}
+	
+	\begin{center}
+	
+	\begin{scriptsize}
+	
+	\begin{itemize}
+	
+	\item $p$ represents the relitive probability that an electron is at the described point
+	
+	\item $e$ is Euler's number (a constant)
+	
+	\item $r$ is the distance of the electron from the center of the atom
+	
+	\item $a$ is the typical distance of the electron from the center of the atom, based on the shell/orbital the electron is in.
+	
+	\end{itemize}
+	
+	\end{scriptsize}
+	
+	\end{center}
 
-\begingroup
+\end{frame}
+				
+				
 \begin{frame}{Wave Interference}
 	\begin{figure}
 		\includegraphics[height= 0.7\textheight]{pond_wave_interference}
-		
-	\caption {Destructive Interference Occuring Between two Waves in a Pond}
+												
+		\caption {Destructive Interference Occuring Between two Waves in a Pond}
 	\end{figure}
-
+							
 \end{frame}
-\endgroup
-
+				
+				
 \begin{frame}{Wave interference}
 	When two waves meet, interference occurs.
 	\begin{itemize}
-	\item This interference is just the sum of the two waves.
-	\item This means that when the waves are in phase with eachother, their valleys and peaks will line up, and the waves will constructively interfere.
-	\item When the waves are perfectly out of phase, the valleys of one wave will line up with the peaks of another, and the waves will cancel eachother out.
+		\item This interference is just the sum of the two waves.
+		\item This means that when the waves are in phase with eachother, their valleys and peaks will line up, and the waves will constructively interfere.
+		\item When the waves are perfectly out of phase, the valleys of one wave will line up with the peaks of another, and the waves will cancel eachother out.
 	\end{itemize}
-
-	
-\begin{columns}[c]	
-	\begin{column}{.5\textwidth}
-		\begin{figure}
-		\includegraphics[height=0.2\textheight]{pi_shifted_matplotlib}
-		\caption{Destructive Interference Between Two Sinesoids}
-		\end{figure}
-	\end{column}
-	
-
-	
-	\begin{column}{.5\textwidth}
-		\begin{figure}
-			\includegraphics[height=0.5\textheight]{in_phase_matplotlib}
-			\caption{Constructive Interference Between two Sinesoids}
-		\end{figure}
-	\end{column}
-\end{columns}
-
+							
+								
+	\begin{columns}[c]	
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\includegraphics[height=0.2\textheight]{pi_shifted_matplotlib}
+				\caption{Destructive Interference Between Two Sinesoids}
+			\end{figure}
+		\end{column}
+											
+										
+											
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\includegraphics[height=0.5\textheight]{in_phase_matplotlib}
+				\caption{Constructive Interference Between two Sinesoids}
+			\end{figure}
+		\end{column}
+	\end{columns}
+							
 \end{frame}
-
+				
 \begin{frame}{Refrences}
 	"Two point source interference Pattern" by Lub0t is licensed under https://creativecommons.org/licenses/by/3.0/
+							
+							
+	Figure \ref{fig:Phasor} by Gonfer is licensed under https://creativecommons.org/licenses/by-sa/3.0/
+							
+							
 \end{frame}
+				
+
 
 \end{document}
