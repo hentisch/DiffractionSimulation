@@ -89,18 +89,6 @@ def main(image_path, size):
     if image_path == None:
         mlab.show()
     else:
-        # print(image_path)
-        # mlab.process_ui_events()
-        # shot = mlab.screenshot(fig, mode="rgb", antialiased=True)
-        # import pylab as pl
-        # pl.imshow(shot)
-        # pl.axis('off'~)
-        # pl.show()
-        # mlab.savefig('test.png', figure=fig, size=size)
-        #fig.scene.save('test.png', size=size)
-        # # mlab.draw(fig)
-        # mlab.show()
-        # fig = mlab.screenshot(mode="rgba")
         mlab.savefig(image_path, figure=fig, size=(size[0]/10, size[1]/10))
 
 if __name__ == "__main__":
