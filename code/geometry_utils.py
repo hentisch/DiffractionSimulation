@@ -1,3 +1,4 @@
+from audioop import reverse
 import numpy as np
 import math
 
@@ -262,25 +263,21 @@ def get_3d_cos_wave(len:float, num_points:int, amplitude:float, wavelength:float
 
     # mlab.show() 
 
-def get_3d_cos_wave_between_points(coordinates:float, num_points:int, amplitude:float, wavelength:float):
+def get_3d_cos_wave_between_points(coordinates:float, num_points:int, amplitude:float, wavelength:float, y_rotation:float):
     length = math.dist(*coordinates)
     non_rotated_wave = get_3d_cos_wave(length, num_points, amplitude, wavelength)
-    non_rotated_wave[:,0] += coordinates[0][0]
-    non_rotated_wave[:,1] += coordinates[0][1]
-    non_rotated_wave[:,2] += coordinates[0][2]
+    rotated_wave = rotate_3d_points(non_rotated_wave, y_rotation, 'y', coordinates[0])
 
-    # return non_rotated_wave
-    print(get_2d_points(coordinates[1], "z"))
-    z_angle = -math.atan2(*reversed(get_2d_points(coordinates[1], 'z'))) 
-    rotated_wave = rotate_3d_points(non_rotated_wave, z_angle, 'z', coordinates[0])
 
-    x_angle = -math.atan2(*reversed(get_2d_points(coordinates[1], 'x'))) - math.atan2(*reversed(get_2d_points(coordinates[0], 'x')))
-    rotated_wave = rotate_3d_points(rotated_wave, x_angle, 'x', coordinates[0])
+    rotated_wave[:,0] += coordinates[0][0]
+    rotated_wave[:,1] += coordinates[0][1]
+    rotated_wave[:,2] += coordinates[0][2]
 
-    print(get_2d_points(coordinates[1], 'y'))
-    y_angle = -math.atan2(*reversed(get_2d_points(coordinates[1], 'y'))) - math.atan2(*reversed(get_2d_points(coordinates[1], 'y')))
-    rotated_wave = rotate_3d_points(rotated_wave, x_angle, 'y', coordinates[0])
+
+    z_angle = -angle_between_points(list(reversed(get_2d_points(coordinates[0], 'z'))), list(reversed(get_2d_points(coordinates[1], 'z'))))
+    rotated_wave = rotate_3d_points(rotated_wave, z_angle, 'z', coordinates[0])
+
+    y_angle = angle_between_points(list((get_2d_points(coordinates[0], 'x'))), list((get_2d_points(coordinates[1], 'x'))))
+    rotated_wave = rotate_3d_points(rotated_wave, y_angle, 'x', coordinates[0])
 
     return rotated_wave
-    #point_angle = angle_between_3d_points(*coordinates)
-    #return rotate_by_euler(non_rotated_wave, point_angle, coordinates[1])
