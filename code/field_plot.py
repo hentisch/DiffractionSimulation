@@ -34,18 +34,20 @@ class FieldModel(HasTraits):
         self.scene.mayavi_scene #For some reason if we don't access this attribute before using it as a figure it wont work
         self.s = mlab.pipeline.volume(mlab.pipeline.scalar_field(self.get_electric_scalar_field(), figure=self.scene.mayavi_scene))
 
-        wave_points = get_3d_cos_wave_between_points(((plot_size[0]/2, plot_size[1]/2, plot_size[2]/2), (5, 55, 33)), 5000, 1, 1)
-        self.w = mlab.plot3d(wave_points[:,0], wave_points[:,1], wave_points[:,2], figure=self.scene.mayavi_scene)
+        # wave_points = get_3d_cos_wave_between_points(((plot_size[0]/2, plot_size[1]/2, plot_size[2]/2), (5, 55, 33)), 5000, 1, 1)
+        # self.w = mlab.plot3d(wave_points[:,0], wave_points[:,1], wave_points[:,2], figure=self.scene.mayavi_scene)
     
     def get_electric_scalar_field(self):
         atom_point = tuple((length/2)*self.unit_size for length in self.plot_size) #The middle of the plot
 
         cloud = np.zeros(self.plot_size)
 
+
+        radius = self.plot_size[0] / 2
         for x in range(self.plot_size[0]):
             for y in range(self.plot_size[1]):
                 for z in range(self.plot_size[2]):
-                    if not np.array_equal(au.multiply_by_scalar((x, y, z), self.unit_size), atom_point):
+                    if not np.array_equal(au.multiply_by_scalar((x, y, z), self.unit_size), atom_point) and dist((x, y, z), atom_point) <= radius:
                         scaled_point = au.multiply_by_scalar((x, y, z), self.unit_size)
                         assert dist(scaled_point, atom_point) != 0
                         cloud[x, y, z] = ts.scattering_by_space(atom_point, au.multiply_by_scalar((x, y, z), self.unit_size), self.wavevector_origin*self.unit_size, self.time, self.wave_amplitude, returned_value=self.mode_select)
