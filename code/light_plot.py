@@ -36,7 +36,7 @@ def plot_cylinder_line(
         )
 
 
-def main(image_path, size):
+def main(image_path=None, size=(300, 300)):
     endpoints = np.array([[0, 0, 0], [0, 4, 0]])
     electric_field = get_3d_cos_wave_between_points(endpoints, 10000, 1, 1, 0)
     magnetic_field = get_3d_cos_wave_between_points(endpoints, 10000, 1, 1, 0.5 * np.pi)
@@ -57,14 +57,15 @@ def main(image_path, size):
         color=rgb_to_mayavi(255, 0, 0),
         figure=fig,
     )
-    ax = mlab.axes(
+
+    """ ax = mlab.axes(
         nb_labels=1,
         xlabel="Strength of magnetic field",
         x_axis_visibility=False,
         y_axis_visibility=False,
         figure=fig,
     )
-    ax.axes.font_factor = 1
+    ax.axes.font_factor = 1 """
 
     mlab.plot3d(
         electric_field[:, 0],
@@ -74,7 +75,7 @@ def main(image_path, size):
         figure=fig,
     )
 
-    ranges = (endpoints[0][0], endpoints[1][0], endpoints[0][1], endpoints[1][1], -1, 1)
+    """ ranges = (endpoints[0][0], endpoints[1][0], endpoints[0][1], endpoints[1][1], -1, 1)
     ax = mlab.axes(
         nb_labels=1,
         ranges=ranges,
@@ -82,9 +83,7 @@ def main(image_path, size):
         ylabel="Distance",
         figure=fig,
     )
-    ax.axes.font_factor = 1
-
-    print(image_path != None)
+    ax.axes.font_factor = 1 """
 
     if image_path == None:
         mlab.show()

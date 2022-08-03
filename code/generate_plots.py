@@ -2,6 +2,8 @@ import os
 from wave_interference import *
 import subprocess
 
+import light_plot
+
 def pi_shifted_wave():
     w = ComponentWave(1, 0)
     a = ComponentWave(1, np.pi)
@@ -26,6 +28,7 @@ def main():
     pi_shifted_wave()
     in_phase_wave()
     download_wave_interference_image()
+    light_plot.main("../materials/slideshow/plots/light.png", (960, 540))
 
 if __name__ == "__main__":
     main()
