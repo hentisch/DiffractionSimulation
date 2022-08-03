@@ -3,9 +3,10 @@
 \usepackage{graphicx}
 \graphicspath{{./images/}{./plots/}}
 
-\setbeamerfont{caption}{size=\scriptsize}
+\setbeamerfont{caption}{size=\tiny}
+\setbeamertemplate{caption}[numbered]
 
-\title {Simulating and Visualizing X-Ray Diffraction from Crystall Lattices`}
+\title {Simulating and Visualizing X-Ray Diffraction from Crystall Lattices}
 
 \author{Henry Tischler}
 
@@ -24,24 +25,80 @@
 
 
 \begin {frame}{What is Light?}
+	\begin{columns}
+	
+	\begin{column}[b]{.5\textwidth}
 	When you have a changing electric field, a changing magnetic field will be created.
+		\begin{itemize}
+		\item A changing magnetic field will also create a changing electric field.
+		\item These changing electric fields will form the wave that is light.
+		\end{itemize}		
+	\end{column}\
+	
+\begin{column}{.5\textwidth}
+		\begin{figure}
+			\includegraphics[width=0.7\textwidth]{light}
+			\caption{A visualization of a light wave}
+		\end{figure}
+	\end{column}
+	
+	\end{columns}
+\end{frame}
 
+\begin{frame}[t]{Thomson Scattering}
+	Becuase light has an electric field, it will "wiggle" a charged particle.
+	
 	\begin{itemize}
-	\item A changing magnetic field will also create a changing electric field.
-	\item These changing electric fields will form the wave that is light.
-	\end{itemize}		
+		\item This wiggling of the electron will create a changing electric field.
+		\item This will create a changing magenetic field, thus forming a new light wave. 
+		\item This forms the phenomenon of Thomson scattering, where light (such as an X-Ray), will be scattered by an electron.
+	\end{itemize}
+	
 \end{frame}
 
-\begin {frame}{What is Light?}
-	%\includegraphics[width=\textwidth]{/home/henry/DiffractionSimulation/materials/slideshow/images/light.png}
+\begin{frame}[t]{Modeling Thomson Scattering}
+	To model Thomson scattering, we can use the following equation:
+	
+	\begin{figure}
+		$$ E_{rad}(R, t) = -E_{x0} {r_0} \frac{e^{i(kR-\omega t)}}{R} cos \psi$$
+		\caption{An equation to model Thomson scattering}
+	\end{figure}
+	
+		{$R$ represents the distance between the point of scattering and the point of observation.
+
+$t$ represents the time of observation.
+
+$e_{x0}$ represents the amplitude of the incident electric field.
+
+$r_0$ represents the classical electron radius, which is about 2.82x10-15 m.
+
+$e$ is Euler's number, and $i$ is the copmlex number.
+
+$k$ is the wavenumber of the incident electric field.}
+
+\end{frame}
+	
+\begin{frame}[t]{Eulers Formula}
+	In the Thomson Scattering Equation, $e^{ix}$ represents the incident oscilitory electric field, using Euler's formula.
+	
+	\begin{itemize}
+		\item Eulers formula is defined by the identiy $ e^{ix} = \cos x + i \sin x $
+		\item In the context of our wave, when converted to polar coordinates, the length of the value represents the amplitude of the scattered wave, and the angle represents the phase of the wave
+	\end{itemize}
 \end{frame}
 
+\begin{frame}{Breaking down the }
+
+\begin{frame}[t]{Thomson scattering from an atom}
+	In most cases, we are not interested in the scattering from a single electron, but rather from an atom.
+	
+\end{frame}
 
 \begingroup
 \begin{frame}{Wave Interference}
 	\begin{figure}
 		\includegraphics[height= 0.7\textheight]{pond_wave_interference}
-
+		
 	\caption {Destructive Interference Occuring Between two Waves in a Pond}
 	\end{figure}
 
@@ -55,10 +112,9 @@
 	\item This means that when the waves are in phase with eachother, their valleys and peaks will line up, and the waves will constructively interfere.
 	\item When the waves are perfectly out of phase, the valleys of one wave will line up with the peaks of another, and the waves will cancel eachother out.
 	\end{itemize}
+
 	
-
 \begin{columns}[c]	
-
 	\begin{column}{.5\textwidth}
 		\begin{figure}
 		\includegraphics[height=0.2\textheight]{pi_shifted_matplotlib}
@@ -70,7 +126,7 @@
 	
 	\begin{column}{.5\textwidth}
 		\begin{figure}
-			\includegraphics[height=0.2\textheight]{in_phase_matplotlib}
+			\includegraphics[height=0.5\textheight]{in_phase_matplotlib}
 			\caption{Constructive Interference Between two Sinesoids}
 		\end{figure}
 	\end{column}
