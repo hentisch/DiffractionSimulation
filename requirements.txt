@@ -8,3 +8,5 @@ numba
 
 scipy
 astropy
+
+Pillow
