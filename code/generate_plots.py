@@ -107,7 +107,7 @@ def long_render_time():
     get_gif_of_lattice(CrystalLattice((2, 2, 2,), UnitCell.face_centered_cubic(1)), "../materials/slideshow/images/face_centered_cubic_lattice")
 
 def main():
-    # short_render_time()
+    short_render_time()
     long_render_time()
 
 if __name__ == "__main__":
