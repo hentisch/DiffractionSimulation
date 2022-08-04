@@ -10,3 +10,4 @@ scipy
 astropy
 
 Pillow
+cairosvg
