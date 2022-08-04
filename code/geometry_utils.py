@@ -241,9 +241,25 @@ def get_xy_tuple(coordinates:np.array) -> tuple:
     """    
     return (coordinates[0], coordinates[1])
 
-def get_2d_points(point:np.array, axis:str):
+def get_2d_point(point:np.array, axis:str):
     axis_index = index_by_dimension[axis]
     return exclude_indices(point, (axis_index,))
+
+def get_2d_points(points:np.array, axis:str):
+    points_2d = np.zeros((len(points), 2))
+    for i, point in enumerate(points):
+        points_2d[i] = get_2d_point(point, axis)
+    return points_2d
+
+def slice_points(points:np.array, axis:str, slice_index:int):
+    axis_ind = index_by_dimension[axis]
+    points_2d = []
+    for point in points:
+        if point[axis_ind] == slice_index:
+            points_2d.append(point)
+    points_2d = np.array(points_2d)
+
+    return get_2d_points(points_2d, axis)
 
 def get_3d_cos_wave(len:float, num_points:int, amplitude:float, wavelength:float):
     # from mayavi import mlab
@@ -274,10 +290,10 @@ def get_3d_cos_wave_between_points(coordinates:float, num_points:int, amplitude:
     rotated_wave[:,2] += coordinates[0][2]
 
 
-    z_angle = -angle_between_points(list(reversed(get_2d_points(coordinates[0], 'z'))), list(reversed(get_2d_points(coordinates[1], 'z'))))
+    z_angle = -angle_between_points(list(reversed(get_2d_point(coordinates[0], 'z'))), list(reversed(get_2d_point(coordinates[1], 'z'))))
     rotated_wave = rotate_3d_points(rotated_wave, z_angle, 'z', coordinates[0])
 
-    y_angle = angle_between_points(list((get_2d_points(coordinates[0], 'x'))), list((get_2d_points(coordinates[1], 'x'))))
+    y_angle = angle_between_points(list((get_2d_point(coordinates[0], 'x'))), list((get_2d_point(coordinates[1], 'x'))))
     rotated_wave = rotate_3d_points(rotated_wave, y_angle, 'x', coordinates[0])
 
     return rotated_wave
