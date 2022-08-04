@@ -11,3 +11,5 @@ astropy
 
 Pillow
 cairosvg
+
+tqdm
