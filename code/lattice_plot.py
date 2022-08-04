@@ -19,14 +19,18 @@ def plot_lattice(lattice:CrystalLattice):
     -------
     None
     """    
+
+    fig = mlab.figure(bgcolor=rgb_to_mayavi(200, 200, 200), fgcolor=(0.0, 0.0, 0.0))
+
     points = lattice.get_raw_points()
-    plot = mlab.points3d(points[:,0], points[:,1], points[:,2], scale_factor=0.1, resolution=20)
+    plot = mlab.points3d(points[:,0], points[:,1], points[:,2], scale_factor=0.1, resolution=20, figure=fig, color=rgb_to_mayavi(55, 55, 55))
     points = np.array([[1, 2, 3], [1, 4, 3]]) 
     for unit_cell_edges in lattice.edge_points:
-        plot_box(unit_cell_edges, (255, 0, 0))
-    mlab.show()
+        plot_box(unit_cell_edges, (255, 0, 0), fig)
+    
+    return fig
 
-def plot_box(corner_points:np.array, color:tuple) -> None:
+def plot_box(corner_points:np.array, color:tuple, fig:mlab.figure) -> None:
 
     """ Plots a bounding box in the current Mayavi plot
     
@@ -59,8 +63,12 @@ def plot_box(corner_points:np.array, color:tuple) -> None:
                 if line not in lines:
                     lines.add(tuple(line))
                     line = np.array([point, other_point])
-                    mlab.plot3d(line[:,0], line[:,1], line[:,2], tube_radius=None, color=rgb_to_mayavi(*color))
+                    mlab.plot3d(line[:,0], line[:,1], line[:,2], tube_radius=None, color=rgb_to_mayavi(*color), figure=fig)
 
 if __name__ == "__main__":
-    lattice = CrystalLattice((1, 5, 1), UnitCell.face_centered_cubic(1))
-    plot_lattice(lattice)
+    lattice = CrystalLattice((2, 2, 2), UnitCell.simple_cubic(1))
+    fig = plot_lattice(lattice)
+    mlab.savefig("./plot1.png", figure=fig)
+    current_view = mlab.view(figure=fig)
+    mlab.view(azimuth=(current_view[0] + 45) % 360, elevation=current_view[1], distance=current_view[2], focalpoint=current_view[3])
+    mlab.savefig("./plot2.png", figure=fig)
