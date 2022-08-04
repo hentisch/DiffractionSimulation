@@ -1,4 +1,5 @@
 import numpy as np
+from geometry_utils import slice_points
 
 from raw_unit_cells import simple_cubic
 from unit_cell import UnitCell
@@ -18,7 +19,7 @@ class CrystalLattice:
         are rendered.
     """
 
-    def __init__(self, shape:tuple[int, int, int], unit_cell:UnitCell) -> None:
+    def __init__(self, shape:'tuple[int, int, int]', unit_cell:UnitCell) -> None:
         """A constructor for the CrystalLattice class.
 
         Parameters
@@ -59,3 +60,7 @@ class CrystalLattice:
             atoms should be drawn
         """        
         return self.all_points.reshape((self.all_points.shape[1]*self.all_points.shape[0], 3))
+    
+    def get_2d_slice(self, axis:str, slice_ind:int):
+        raw_points = self.get_raw_points()
+        return slice_points(raw_points, axis, slice_ind)
