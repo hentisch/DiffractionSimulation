@@ -1,4 +1,7 @@
 import os
+from unit_cell import UnitCell
+from lattice_plot import plot_lattice
+from crystal_latttice import CrystalLattice
 from wave_interference import *
 import subprocess
 
@@ -6,6 +9,8 @@ import light_plot
 
 from PIL import Image
 from cairosvg import svg2png
+
+from mayavi import mlab
 
 def pi_shifted_wave():
     w = ComponentWave(1, 0)
@@ -54,7 +59,10 @@ def download_complex_plane_diagram():
 def download_complex_polar_diagram():
     subprocess.run(["wget", "https://upload.wikimedia.org/wikipedia/commons/7/71/Euler%27s_formula.svg", "-O", "../materials/slideshow/images/complex_polar_plane.svg"])
 
-def main():
+def download_light_spectrum():
+    subprocess.run(["wget", "https://upload.wikimedia.org/wikipedia/commons/f/f1/EM_spectrum.svg", "-O", "../materials/slideshow/images/electromagnetic_spectrum.svg"])
+
+def short_render_time():
     pi_shifted_wave()
     in_phase_wave()
     download_wave_interference_image()
@@ -65,9 +73,36 @@ def main():
     download_complex_polar_diagram()
     svg2png(url="../materials/slideshow/images/complex_polar_plane.svg", write_to="../materials/slideshow/images/complex_polar_plane.png")
 
+    download_light_spectrum()
+    svg2png(url="../materials/slideshow/images/electromagnetic_spectrum.svg", write_to="../materials/slideshow/images/electromagnetic_spectrum.png")
+
     download_phasor_gif()
     light_plot.main("../materials/slideshow/plots/light.png", (960, 540))
 
-    
+def get_figure_pan_gif(fig:mlab.figure, folder_path, num_frames:int):
+    current_view = mlab.view(figure=fig)
+    angles = np.linspace(0, 360, num_frames)
+
+    for i in range(5):
+        mlab.savefig('/tmp/img.png')
+        
+    for i, angle in enumerate(angles):
+        print(angle)
+        mlab.view(azimuth=angle, elevation=current_view[1], distance=current_view[2], focalpoint=current_view[3])
+        mlab.savefig(f'{folder_path}/frame-{i}.png', figure=fig, size=(800, 800))
+
+def long_render_time():
+    lattice = CrystalLattice((2, 2, 2), UnitCell.simple_cubic(1))
+    fig = plot_lattice(lattice)
+    try:
+        os.mkdir("../materials/slideshow/images/simple_cubic_lattice")
+    except FileNotFoundError:
+        pass
+    get_figure_pan_gif(fig, "../materials/slideshow/images/simple_cubic_lattice", 200)
+
+def main():
+    # short_render_time()
+    long_render_time()
+
 if __name__ == "__main__":
     main()
