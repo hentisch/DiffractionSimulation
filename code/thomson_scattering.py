@@ -189,23 +189,26 @@ def scattering_by_space(scattering_point:tuple, observation_point:tuple, wavevec
 
 @njit()
 def electron_probability(distance_from_atom, electron_shell:str):
-    #To prevent overflow errors, this method represents values
-    #internally as nanometers
     if electron_shell == 'k':
-        electron_distance = 2e-11
+        electron_distance = 0.02
     elif electron_shell == 'l':
-        electron_distance = 1.6e-10
+        electron_distance = 0.16
     else:
         raise ValueError("Could not understand electron shell argument, please use either k or l")
 
     nominator = np.exp(-(2*distance_from_atom / electron_distance))
     denominator = np.pi * electron_distance**3
-    return nominator/denominator
+    nanometer_value = nominator/denominator #Note that this function dosen't actually have any unit of distance, this just means that this value was calculated using nanometers
+    return nanometer_value
+
+def check_electron_probability():
+    prob = integrate.quad(lambda r: 4 * np.pi * r **2 * electron_probability(r, 'k'), 0, np.inf)
+    assert np.isclose(1, prob)[0] #The function should integrate to one if you do things correctly
 
 @njit()
 def integrable_function(angle_of_observation, distance_of_observation, incident_field_strength=1, wavelength=1, observation_time=0, electron_shell='k', returned_value="real"):
     spherical_integral_conversion = distance_of_observation**2 * np.sin(angle_of_observation)
-    positional_probability = electron_probability(distance_of_observation, electron_shell)
+    positional_probability = 4 * np.pi * distance_of_observation**2 * electron_probability(distance_of_observation, electron_shell)
     return scattering_by_angle(angle_of_observation, distance_of_observation, observation_time, wavelength, incident_field_strength, returned_value=returned_value) * spherical_integral_conversion * positional_probability
 
 def scattering_from_atom(incident_field_strength, wavelength, observation_time, electron_shell:str='k'):
@@ -218,4 +221,7 @@ if __name__ == "__main__":
     for the purpose of debugging."""
 
     # graph_function(lambda x: charge_distribution(x, 'k'), 2e-11, 2e-16, 10000)
-    print(integrate_function_simpson(lambda x: electron_probability(x, 'k'), 2e-16, 2e-11, 100000))
+
+    # check_electron_probability()
+
+    print(scattering_from_atom(1, 1, 1, 'k'))
