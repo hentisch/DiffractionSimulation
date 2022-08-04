@@ -12,6 +12,8 @@ from cairosvg import svg2png
 
 from mayavi import mlab
 
+from tqdm import tqdm
+
 def pi_shifted_wave():
     w = ComponentWave(1, 0)
     a = ComponentWave(1, np.pi)
@@ -86,19 +88,23 @@ def get_figure_pan_gif(fig:mlab.figure, folder_path, num_frames:int):
     for i in range(5):
         mlab.savefig('/tmp/img.png')
         
-    for i, angle in enumerate(angles):
-        print(angle)
+    for i, angle in enumerate(tqdm(angles)):
         mlab.view(azimuth=angle, elevation=current_view[1], distance=current_view[2], focalpoint=current_view[3])
         mlab.savefig(f'{folder_path}/frame-{i}.png', figure=fig, size=(800, 800))
 
-def long_render_time():
-    lattice = CrystalLattice((2, 2, 2), UnitCell.simple_cubic(1))
+def get_gif_of_lattice(lattice:CrystalLattice, folder_path:str):
     fig = plot_lattice(lattice)
     try:
-        os.mkdir("../materials/slideshow/images/simple_cubic_lattice")
-    except FileNotFoundError:
+        os.mkdir(folder_path)
+    except FileExistsError:
         pass
-    get_figure_pan_gif(fig, "../materials/slideshow/images/simple_cubic_lattice", 200)
+
+    get_figure_pan_gif(fig, folder_path, 100)
+    
+def long_render_time():
+    get_gif_of_lattice(CrystalLattice((2, 2, 2), UnitCell.simple_cubic(1)), "../materials/slideshow/images/simple_cubic_lattice")
+    get_gif_of_lattice(CrystalLattice((2, 2, 2), UnitCell.body_centered_cubic(1)), "../materials/slideshow/images/body_centered_cubic_lattice")
+    get_gif_of_lattice(CrystalLattice((2, 2, 2,), UnitCell.face_centered_cubic(1)), "../materials/slideshow/images/face_centered_cubic_lattice")
 
 def main():
     # short_render_time()
