@@ -82,12 +82,9 @@ class WavePlot:
 
         self.wave_lines = []
     
-    def plot(self, title:str="Wave Interference", filepath:str=None, aspect_ratio:float=4/3, inches_per_unit:float=1):
+    def plot(self, title:str="Wave Interference", filepath:str=None, size:tuple=(300, 700), inches_per_unit:float=1, line_styles:str=['solid']):
+        plt.figure(figsize=size)
         fig, ax = plt.subplots()
-
-        x_left, x_right = ax.get_xlim()
-        y_low, y_high = ax.get_ylim()
-        ax.set_aspect(abs((x_right-x_left)/(y_low-y_high))*aspect_ratio)
 
         for i, wave in enumerate(self.all_waves):
             x_values = np.linspace(0, self.max, self.num_samples)
@@ -97,7 +94,7 @@ class WavePlot:
                 label = "Composite Wave"
             else:
                 label = f"Wavelength - {wave.wavelength}, Amplitude - {wave.amplitude}" 
-            self.wave_lines.append(plt.plot(x_values, y_values, color=self.colors[i%len(self.colors)], label=label))
+            self.wave_lines.append(plt.plot(x_values, y_values, color=self.colors[i%len(self.colors)], label=label, linestyle=line_styles[i % len(line_styles)]))
 
         plt.legend(loc="upper left")
 
