@@ -297,3 +297,9 @@ def get_3d_cos_wave_between_points(coordinates:float, num_points:int, amplitude:
     rotated_wave = rotate_3d_points(rotated_wave, y_angle, 'x', coordinates[0])
 
     return rotated_wave
+
+def rotate_2d_points(points:np.array, angle:float, center_point:tuple):
+    new_points = np.zeros(points.shape)
+    for i, point in enumerate(points):
+        new_points[i] = rotate_point(point, angle, center_point)
+    return new_points
