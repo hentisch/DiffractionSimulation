@@ -19,8 +19,8 @@ from utils import graph_3d_function, graph_function, integrate_function_simpson
 from numba import njit
 
 #TODO, make this method return phase and amplitude
-@njit()
-def scattering_by_angle(angle_of_observation:float, distance_from_scattering:float, observation_time:float, wavelength:float, wave_amplitude:float, returned_value="amplitude", round_cos=False) -> float:
+#@njit()
+def scattering_by_angle(angle_of_observation:float, distance_from_scattering:float, observation_time:float, wavelength:float, wave_amplitude:float, returned_value="amplitude/cos") -> float:
     """ Finds the amplitude of Thomson scattering from a certain
     point in space. This point is described in terms of the 
     'angle_of_observation', and 'distance_from_scattering'.
@@ -76,42 +76,17 @@ def scattering_by_angle(angle_of_observation:float, distance_from_scattering:flo
     
     # thomson_scattering_length = sp.constants.value("classical electron radius")
 
-    thomson_scattering_length = 2.8179403262e-15
+    classical_electron_radius = 2.8179403262e-15
+    amplitude = (wave_amplitude * classical_electron_radius) / distance_from_scattering * np.cos(angle_of_observation)
 
-    oscillatory_multiplicand = -thomson_scattering_length*wave_amplitude
-    
     wavenumber = wc.convert(wavelength, "wavelength", "wavenumber")
     angular_frequency = wc.convert(wavelength, "wavelength", "angular_frequency")
+    phase = wavenumber * distance_from_scattering - angular_frequency * observation_time
 
-    thing = wavenumber*distance_from_scattering - angular_frequency*observation_time
-
-    real_oscillatory_value = np.cos(thing)
-    imaginary_oscilitory_value = np.sin(thing)
-
-    cosine_val = np.cos(angle_of_observation)
-
-    if round_cos:
-        cosine_val = np.round(cosine_val, 5)
-
-    attenduated_multiplicand = oscillatory_multiplicand * cosine_val
-
-    if returned_value == "real":
-        return attenduated_multiplicand * real_oscillatory_value
-    elif returned_value == "imaginary":
-        return attenduated_multiplicand * imaginary_oscilitory_value
-    else:
-        complex_value = attenduated_multiplicand * (real_oscillatory_value + imaginary_oscilitory_value*1j)
-
-    amplitude, phase = cmath.polar(complex_value)
-
-    if returned_value == "amplitude":
-        return amplitude
-    elif returned_value == "phase":
-        return phase
+    if returned_value == "amplitude/cos":
+        return amplitude, phase
     elif returned_value == "complex":
-        complex_value
-    else:
-        raise ValueError(f"Could not interpret the returned value parameter, please, use either \"amplitude\" or \"phase\"")
+        return cmath.rect(amplitude, phase)
 
 def scattering_by_space(scattering_point:tuple, observation_point:tuple, wavevector_origin:tuple, observation_time:float, wave_amplitude:float, polarization_of_electric_field="z", returned_value="amplitude") -> float:
     """ Finds the amplitude of Thomson scattering based on several points
@@ -187,6 +162,7 @@ def scattering_by_space(scattering_point:tuple, observation_point:tuple, wavevec
     return scattering_by_angle(angle_of_observation=respective_angle, distance_from_scattering=distance_from_scattering, observation_time=observation_time,
     wavelength=wavelength, wave_amplitude=wave_amplitude, returned_value=returned_value)
 
+radius_by_shell = {'k': 0.02, 'l':0.16} #in nanometers
 @njit()
 def electron_probability(distance_from_atom, electron_shell:str):
     if electron_shell == 'k':
@@ -206,15 +182,22 @@ def check_electron_probability():
     assert np.isclose(1, prob)[0] #The function should integrate to one if you do things correctly
 
 @njit()
-def integrable_function(angle_of_observation, distance_of_observation, offset=0, incident_field_strength=1, wavelength=1, observation_time=0, electron_shell='k', returned_value="real"):
-    spherical_integral_conversion = (distance_of_observation+offset)**2 * np.sin(angle_of_observation)
-    positional_probability = 4 * np.pi * distance_of_observation**2 * electron_probability(distance_of_observation, electron_shell)
-    return scattering_by_angle(angle_of_observation, distance_of_observation+offset, observation_time, wavelength, incident_field_strength, returned_value=returned_value) * spherical_integral_conversion * positional_probability
+def integrable_function(angle_of_observation, subatomic_distance, offset=0, incident_field_strength=1, wavelength=1, observation_time=0, electron_shell='k', returned_value="real"):
+    spherical_integral_conversion = (subatomic_distance+offset)**2 * np.sin(angle_of_observation)
+    positional_probability = 4 * np.pi * subatomic_distance**2 * electron_probability(subatomic_distance, electron_shell)
+    return scattering_by_angle(angle_of_observation, subatomic_distance+offset, observation_time, wavelength, incident_field_strength, returned_value=returned_value) * spherical_integral_conversion * positional_probability
 
 def scattering_from_atom(incident_field_strength, wavelength, observation_time, electron_shell:str='k', offset=0):
     real_integral, real_err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(offset, incident_field_strength, wavelength, observation_time, electron_shell, "real"))
     imaginary_integral, imag_err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(offset, incident_field_strength, wavelength, observation_time, electron_shell, "imaginary"))
     return real_integral + imaginary_integral*1j
+
+def angle_free_atom_scattering(incident_field_strength, wavelength, observation_time, electron_shell:str='k', offset=0):
+    integratable_func = lambda r: scattering_by_angle(0, r+offset, observation_time, wavelength, incident_field_strength, returned_value="complex") * electron_probability(r, electron_shell) * 4 * np.pi * radius_by_shell[electron_shell]**2
+    real_integral = integrate.quad(lambda r: integratable_func(r).real, 0, np.inf)
+    imaginary_integral = integrate.quad(lambda r: integratable_func(r).imag, 0, np.inf)
+    complex_integral = real_integral[0] + imaginary_integral[0] * 1j
+    return complex_integral
 
 if __name__ == "__main__":
     """ This script is not really meant to be ran on it's own - this bit of code just allows you to graph different variables of the function
