@@ -20,9 +20,11 @@ def get_2d_lattice_points(lattice:CrystalLattice, axis:str, slice_ind:int):
 
 class DiffractionPlot:
     
-    def __init__(self) -> None:
+    def __init__(self, interatomic_spacing) -> None:
         self.points = get_2d_lattice_points(CrystalLattice((3, 1, 1), UnitCell.simple_cubic(1)), 'y', 1)
-        self.points /= 0.707
+        self.points /= interatomic_spacing
+
+        self.interatomic_spacing = interatomic_spacing
     
     def plot_points(self):
         plt.scatter(self.points[:,0], self.points[:,1])
@@ -30,7 +32,7 @@ class DiffractionPlot:
     
     def calculate_diffraction(self, point_of_observation:tuple, angle_of_scattering:float):
         wavenumber = wc.convert(1, "wavelength", "wavenumber")
-        phase_shift = wavenumber * np.sin(angle_of_scattering)
+        phase_shift = wavenumber * np.sin(angle_of_scattering) * self.interatomic_spacing
         value_at_observation_point = 0j
         for point in self.points:
             atomic_distance = dist(point, point_of_observation)
