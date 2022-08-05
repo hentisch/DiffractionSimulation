@@ -23,6 +23,23 @@
 \begin{document}
 \titlepage
 
+\begin{frame}[t]{Motivations}
+	
+	\begin{columns}[c]
+		\begin{column}{.5\textwidth}
+			\includegraphics[height=0.1\textheight]{photo_51}
+		\end{column}
+						
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\includegraphics[height=0.1\textheight]{protein}
+			\end{figure}
+		\end{column}
+				
+	\end{columns}
+						
+\end{frame}
+
 
 \begin {frame}{What is Light?}
 \begin{columns}
@@ -30,11 +47,11 @@
 	\begin{column}[b]{.5\textwidth}
 		When you have a changing electric field, a changing magnetic field will be created.
 		\begin{itemize}
-			\item Light is an electromagnetic wave.
 			\item A changing magnetic field will also create a changing electric field.
-			\item These changing electric fields will form the wave that is light.
+			\item This creates a cycle between the two fields.
+			\item This cycle between the electric and the magnetic fields of the wave is why light is also known as electromagnetic radiation.
 		\end{itemize}		
-	\end{column}\
+	\end{column}
 				
 	\begin{column}{.5\textwidth}
 		\begin{figure}
@@ -49,8 +66,8 @@
 \begin{frame}[t]{Electromagnetic Spectrum}
 	Light (Electromagnetic Radiation) exists on a variety of different wavelengths
 	\begin{itemize}
+			\item Light with a smaller wavelength, and thus a higher frequency, will carry more energy.
 		\item Wavelength and frequency are connected with the relationship $\lambda f = c$, where $\lambda$ is the wavelength of the wave, $f$ is the frequency of the wave, and $c$ is the speed of light.
-		\item Light with a smaller wavelength, and thus a higher frequency, will carry more energy.
 	\end{itemize}
 	\begin{figure}
 		\includegraphics[height=0.45\textheight]{electromagnetic_spectrum}
@@ -59,11 +76,12 @@
 \end{frame}
 
 \begin{frame}[t]{Thomson Scattering}
-  Becuase light has an electric field, it will "wiggle" a charged particle.
+  Becuase light has an electric field, it will "wiggle" a charged particle, such as an electron.
 	\begin{itemize}
 		\item This wiggling of the electron will create a changing electric field.
 		\item This will create a changing magenetic field, thus forming a new light wave. 
 		\item This forms the phenomenon of Thomson scattering, where light with relitively low energy (such as an X-Ray), will be scattered by an electron.
+		\item The force acting on the electron is specifically the Lorentz force, which is a combination of the electric and magnetic fields. This force is oscilatory, which is why the electron is "wiggled".
 	\end{itemize}
 				
 \end{frame}
@@ -78,7 +96,7 @@
 	
 	\begin{scriptsize}
 		\begin{itemize}
-	\item $R$ represents the distance between the point of scattering and the point of observation.
+	\item $R$ represents the distance between the electron and the point of observation.
 						
 	\item $t$ represents the time of observation.
 						
@@ -91,6 +109,24 @@
 	\item $k$ is the wavenumber of the incident electric field.
 		\end{itemize}
 	\end{scriptsize}						
+\end{frame}
+
+\begin{frame}{Thomson Scattering Visualizations}
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+			\begin{figure}
+				\includegraphics[height=.5\textheight]{amplitude_graphed}
+				\caption{A graph of the amplitude of thomson scattering over space}
+			\end{figure}
+		\end{column}
+		
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\includegraphics[height=.5\textheight]{phase_graphed}
+				\caption{A graph of the phase of thomson scattering over space}
+			\end{figure}			
+		\end{column}
+	\end{columns}
 \end{frame}
 	
 \begin{frame}[t]{Eulers Formula}
@@ -132,7 +168,7 @@
 		\begin{column}{.5\textwidth}
 			To describe a wave, we can use complex polar coordinates.
 			\begin{itemize}
-				\item With polar coordinates, instead of describing the complex number with cartesian coordinates in an x, y plane (like can be seen in the plot on the previous slide), we describe it with an angle it with an angle and magnitude.
+				\item With polar coordinates, instead of describing the complex number with cartesian coordinates in an x, y plane (like we did on the previous slide), we describe it with an angle it with an angle and magnitude.
 			\end{itemize}
 		\end{column}
 						
@@ -251,7 +287,7 @@
 	\begin{columns}[c]	
 		\begin{column}{.5\textwidth}
 			\begin{figure}
-				\includegraphics[height=0.2\textheight]{pi_shifted_matplotlib}
+				\includegraphics[height=0.3\textheight]{pi_shifted_matplotlib}
 				\caption{Destructive Interference Between Two Sinesoids}
 			\end{figure}
 		\end{column}
@@ -260,7 +296,7 @@
 											
 		\begin{column}{.5\textwidth}
 			\begin{figure}
-				\includegraphics[height=0.5\textheight]{in_phase_matplotlib}
+				\includegraphics[height=0.3\textheight]{in_phase_matplotlib}
 				\caption{Constructive Interference Between two Sinesoids}
 			\end{figure}
 		\end{column}
@@ -268,22 +304,22 @@
 							
 \end{frame}
 				
-\begin{frame}{Crystall Lattices}
+\begin{frame}{Crystal Lattices}
 
 	\begin{columns}
 	
 	\begin{column}{.5\textwidth}
-		In a crystal structure, atoms are organized into a grid
+		In a crystal structure, atoms are organized into a grid we call a lattice.
 		\begin{itemize}
-			\item The most basic repreating unit in a crystal structure is known as it's unit cell
+			\item The most basic repreating unit in a crystal structure is known as the unit cell.
 			\item This unit cell is then repreated to form an entire crystall
-			\item Note that in most real crystalls, the lattice is not perfect as is shown in these diagrams
+			\item Note that in most real crystals, the lattice is not perfect, unlike what is shown in these diagrams.
 		\end{itemize}
 	\end{column}	
 	
 	\begin{column}{.5\textwidth}
 	\begin{figure}
-		\animategraphics[autoplay,loop,width=0.5\textwidth]{4}{simple_cubic_lattice/frame-}{0}{99}	
+		\animategraphics[loop,width=0.5\textwidth]{4}{simple_cubic_lattice/frame-}{0}{99}	
 		\caption{An animation of a simple cubic lattice}
 	\end{figure}
 	\end{column}
@@ -309,6 +345,31 @@
 	\end{column}
 	
 	\end{columns}
+\end{frame}
+
+\begin{frame}{Bragg's Law}
+	Bragg's Law allows us to deduce the angle a light beam needs to strike the surface of a crystall latice at, in order to produce constructive interference.
+	
+	\begin{figure}
+		$$ n \lambda = 2d \sin \theta$$
+		\caption{An equation describing braggs }
+	\end{figure}		
+	
+	\begin{scriptsize}
+		\begin{itemize}
+		\item $n$ is any integer
+		\item $\lambda$ is the wavelength of the incident light
+		\item $d$ is the distance between layers of atoms
+		\item $\theta$ is the angle of the incident light
+		\end{itemize}
+	\end{scriptsize}
+\end{frame}
+
+\begin{frame}{Bragg's Law Example}
+	\begin{figure}
+		\includegraphics[width=0.8 \textwidth]{braggs.png}
+		\caption{An example of braggs diffraction}
+	\end{figure}
 \end{frame}
 				
 \begin{frame}{Refrences}
