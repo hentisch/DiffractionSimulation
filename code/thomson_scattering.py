@@ -193,9 +193,9 @@ def scattering_from_atom(incident_field_strength, wavelength, observation_time, 
     return real_integral + imaginary_integral*1j
 
 def angle_free_atom_scattering(incident_field_strength, wavelength, observation_time, electron_shell:str='k', offset=0):
-    integratable_func = lambda r: scattering_by_angle(0, r+offset, observation_time, wavelength, incident_field_strength, returned_value="complex") * electron_probability(r, electron_shell) * 4 * np.pi * radius_by_shell[electron_shell]**2
-    real_integral = integrate.quad(lambda r: integratable_func(r).real, 0, np.inf)
-    imaginary_integral = integrate.quad(lambda r: integratable_func(r).imag, 0, np.inf)
+    integratable_func = lambda r: scattering_by_angle(0, (r+offset)*1e-9, observation_time, wavelength*1e-9, incident_field_strength, returned_value="complex") * electron_probability(r, electron_shell) * 4 * np.pi * ((r+offset))**2
+    real_integral = integrate.quad(lambda r: integratable_func(r).real, 0, 1000)
+    imaginary_integral = integrate.quad(lambda r: integratable_func(r).imag, 0, 1000)
     complex_integral = real_integral[0] + imaginary_integral[0] * 1j
     return complex_integral
 
