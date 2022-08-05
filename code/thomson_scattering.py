@@ -206,14 +206,14 @@ def check_electron_probability():
     assert np.isclose(1, prob)[0] #The function should integrate to one if you do things correctly
 
 @njit()
-def integrable_function(angle_of_observation, distance_of_observation, incident_field_strength=1, wavelength=1, observation_time=0, electron_shell='k', returned_value="real"):
-    spherical_integral_conversion = distance_of_observation**2 * np.sin(angle_of_observation)
+def integrable_function(angle_of_observation, distance_of_observation, offset=0, incident_field_strength=1, wavelength=1, observation_time=0, electron_shell='k', returned_value="real"):
+    spherical_integral_conversion = (distance_of_observation+offset)**2 * np.sin(angle_of_observation)
     positional_probability = 4 * np.pi * distance_of_observation**2 * electron_probability(distance_of_observation, electron_shell)
-    return scattering_by_angle(angle_of_observation, distance_of_observation, observation_time, wavelength, incident_field_strength, returned_value=returned_value) * spherical_integral_conversion * positional_probability
+    return scattering_by_angle(angle_of_observation, distance_of_observation+offset, observation_time, wavelength, incident_field_strength, returned_value=returned_value) * spherical_integral_conversion * positional_probability
 
-def scattering_from_atom(incident_field_strength, wavelength, observation_time, electron_shell:str='k'):
-    real_integral, real_err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(incident_field_strength, wavelength, observation_time, electron_shell, "real"))
-    imaginary_integral, imag_err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(incident_field_strength, wavelength, observation_time, electron_shell, "imaginary"))
+def scattering_from_atom(incident_field_strength, wavelength, observation_time, electron_shell:str='k', offset=0):
+    real_integral, real_err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(offset, incident_field_strength, wavelength, observation_time, electron_shell, "real"))
+    imaginary_integral, imag_err = integrate.dblquad(integrable_function, 0, np.inf, 0, np.pi, args=(offset, incident_field_strength, wavelength, observation_time, electron_shell, "imaginary"))
     return real_integral + imaginary_integral*1j
 
 if __name__ == "__main__":
