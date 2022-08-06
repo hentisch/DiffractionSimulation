@@ -38,13 +38,13 @@ class DiffractionPlot:
     def calculate_diffraction(self, point_of_observation:tuple, angle_of_scattering:float, wavelength:float):
         # wavenumber = wc.convert(1, "wavelength", "wavenumber")
         wavenumber = 2*np.pi/wavelength
-        phase_shift = (wavenumber * np.sin(angle_of_scattering) * self.interatomic_spacing) * 1
+        phase_shift = (wavenumber * np.sin(angle_of_scattering) * self.interatomic_spacing) 
         value_at_observation_point = 0j
 
         phases = []
         for point in self.points:
             atomic_distance = dist(point, point_of_observation)
-            scattering_value = angle_free_atom_scattering(1, 0.1, 0, 'k', atomic_distance)
+            scattering_value = angle_free_atom_scattering(1, wavelength, 0, 'k', atomic_distance)
             # scattering_value = scattering_by_angle(0, atomic_distance, 0, wavelength, 1, returned_value="complex")
 
             if point[1] == self.interatomic_spacing:
@@ -77,8 +77,11 @@ class DiffractionPlot:
             plt.colorbar()
             plt.show() """
         plt.imshow(phase_points.transpose(), origin='lower')
-        plt.colorbar()
-        plt.show()
+        col_bar = plt.colorbar()
+        col_bar.ax.set_ylabel("Amplitude (Volts / Meter)")
+        plt.title("Amplitude of Light Diffracted from a Crystall Lattice", fontsize=9)
+        plt.xlabel("X Distance on Plane of Observation (Nanometers)")
+        plt.ylabel("Y Distance on Plane of Observation (Nanometers)")
         
         
 
@@ -86,5 +89,5 @@ if __name__ == "__main__":
     plot = DiffractionPlot(0.070710678118)
     # plot.plot_points()
     # print(plot.calculate_diffraction((10, 10), 0.785398))
-    # plot.get_meshgrid(0.785398, -5e8, 5e8, 1e7, 1e9, 1e9)
-    plot.get_meshgrid(np.pi/4, 0.1, -1e8, 1e8, 1e7, 6e9, 6e9)
+    plot.get_meshgrid(0.785398, 0.1, -5e8, 5e8, 1e7, 1e9, 1e9)
+    # plot.get_meshgrid(np.pi/4, 0.1, -1e4, 1e4, 1e3, 6e9, 6e9)

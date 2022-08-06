@@ -5,8 +5,7 @@ from wave_interference import ComponentWave, WavePlot
 import numpy as np
 import matplotlib.pyplot as plt
 
-from diffraction_plot import DiffractionPlot
-
+import diffraction_plot
 def download_photo_51():
     subprocess.run(["wget", "https://upload.wikimedia.org/wikipedia/en/b/b2/Photo_51_x-ray_diffraction_image.jpg", "-O", "../materials/slideshow/images/photo_51.png"])
     subprocess.run(["convert", "../materials/slideshow/images/photo_51.png", "../materials/slideshow/images/photo_51.png"])
@@ -66,7 +65,21 @@ def slideshow():
 
     light_plot.main("../materials/slideshow/plots/light.png", (960, 540))
 
-    lattice_from_diffraction()
+def slideshow_intense():
+    plot = diffraction_plot.DiffractionPlot(0.070710678118)
+    plot.get_meshgrid(0.785398, 0.1, -5e8, 5e8, 1e7, 1e9, 1e9)
+    plt.savefig("../materials/slideshow/images/constructive_atoms.png", dpi=300)
 
+    plot = diffraction_plot.DiffractionPlot(0.070710678118)
+    plot.get_meshgrid(0.785398, 1, -5e8, 5e8, 1e7, 1e9, 1e9)
+    plt.savefig("../materials/slideshow/images/nonconstructive_atoms_wavelength.png", dpi=300)
+
+    plot = diffraction_plot.DiffractionPlot(0.070710678118)
+    plot.get_meshgrid(0.785398, 0.1, -5e8, 5e8, 1e7, 4e9, 4e9)
+    plt.savefig("../materials/slideshow/images/nonconstructive_viewpoint_4cm.png", dpi=300)
+
+    plot = diffraction_plot.DiffractionPlot(0.070710678118)
+    plot.get_meshgrid(0.785398, 0.1, -5e5, 5e5, 1e3, 1e9, 1e9)
+    plt.savefig("../materials/slideshow/images/nonconstructive_sizing.png", dpi=300)
 if __name__ == "__main__":
-    slideshow()
+    slideshow_intense()
