@@ -5,6 +5,8 @@ from wave_interference import ComponentWave, WavePlot
 import numpy as np
 import matplotlib.pyplot as plt
 
+from diffraction_plot import DiffractionPlot
+
 def download_photo_51():
     subprocess.run(["wget", "https://upload.wikimedia.org/wikipedia/en/b/b2/Photo_51_x-ray_diffraction_image.jpg", "-O", "../materials/slideshow/images/photo_51.png"])
     subprocess.run(["convert", "../materials/slideshow/images/photo_51.png", "../materials/slideshow/images/photo_51.png"])
@@ -35,6 +37,13 @@ def in_phase_wave():
     n = WavePlot([w, a], w_a, 2, 10000)
     n.plot("In Phase Waves", "../materials/slideshow/plots/in_phase_matplotlib.png", size=(1920, 1440), line_styles=['dotted', 'dotted', 'solid'])
 
+def lattice_from_diffraction():
+    plot = DiffractionPlot(0.070710678118)
+    plot.plot_points()
+    plt.title("Points used in diffraction simulations")
+    plt.xlabel("Point on X-Axis (Nanometers)")
+    plt.ylabel("Point on Y-Axis (Nanometers)")
+    plt.savefig("../materials/slideshow/plots/lattice_simulation_points.png")
 
 def slideshow():
     download_photo_51()
@@ -45,15 +54,19 @@ def slideshow():
     pi_shifted_wave()
     in_phase_wave()
 
-    mls.get_amplitude_graph()
-    plt.savefig("../materials/slideshow/plots/amplitude.png", dpi=300)
-    
     plt.clf()
-    
+
+    mls.get_amplitude_graph()
+    plt.savefig("../materials/slideshow/plots/thomson_amplitude.png", dpi=300)
+
+    plt.clf()
+
     mls.get_phase_graph()
     plt.savefig("../materials/slideshow/plots/phase.png", dpi=300, pad_inches=1)
 
     light_plot.main("../materials/slideshow/plots/light.png", (960, 540))
+
+    lattice_from_diffraction()
 
 if __name__ == "__main__":
     slideshow()

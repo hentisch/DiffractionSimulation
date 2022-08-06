@@ -7,7 +7,8 @@
 \setbeamerfont{caption}{size=\tiny}
 \setbeamertemplate{caption}[numbered]
 
-\title {Simulating and Visualizing X-Ray Diffraction from Crystall Lattices}
+
+\title {Simulating and Visualizing X-Ray Diffraction from Crystal Lattices}
 
 \author{Henry Tischler}
 
@@ -21,6 +22,7 @@
 	\end{frame}
 }
 \begin{document}
+
 \titlepage
 
 \begin{frame}{X-Ray Crystallography}
@@ -29,20 +31,204 @@
 	\begin{column}[b]{.5\textwidth}
 		\begin{figure}
 			\includegraphics[height=0.7\textheight]{photo_51}
-			\caption{The famous Photo 51, a diffraction pattern of DNA which would allow its structure to be deduced}
+			\caption{The famous Photo 51, a diffraction pattern of DNA which allowed it's structure to be deduced.}
 		\end{figure}
 	\end{column}
 				
 	\begin{column}[b]{.5\textwidth}
 		\begin{figure}
 			\includegraphics[height=0.7\textheight]{protein}
-			\caption{A ribbon diagram of myoglobin, the structure of which was deduced via X-Ray crystallography}
+			\caption{A ribbon diagram of myoglobin, the structure of which was deduced via X-Ray crystallography.}
 		\end{figure}
 	\end{column}
 				
 \end{columns}
 \end{frame}
 
-\begin{frame}{X-Ray Spectrometry}
+\begin{frame}{Bragg's Law and Crystallography}
+	X-Ray Crystallography relies on Bragg's Law, a property of the grids (lattices) crystall structures form.
+	\begin{itemize}
+	\item I am attempting to observe this property in a simulation of X-Ray scattering, without actually implementing it directly.
+	\end{itemize}
+	
+	\begin{figure}
+		\includegraphics[height=0.5\textheight]{lattice}
+		\caption{A 3d visualization of a simple cubic crystal structure}
+	\end{figure}
+	
+\end{frame}
+
+\begin{frame}{What is Light?}
+\begin{columns}
+				
+	\begin{column}[b]{.5\textwidth}
+		When you have a changing electric field, a changing magnetic field will be created.
+		\begin{itemize}
+			\item A changing magnetic field will also create a changing electric field.
+			\item This is why light is known as an electromagnetic wave.
+		\end{itemize}		
+	\end{column}
+				
+	\begin{column}{.5\textwidth}
+		\begin{figure}
+			\includegraphics[width=0.73\textwidth]{light}
+			\caption{A visualization of a light wave}
+		\end{figure}
+	\end{column}
+				
+\end{columns}
+\end{frame}
+
+\begin{frame}{Thomson Scattering}
+	Becuase light has an electric field, if it encounters an electron, it will wiggle the electron, causing the electron to scatter the light which encountered it.
+	\begin{itemize}
+		\item Note that this works with the electrons on an atom.
+	\end{itemize}
+	\begin{columns}
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\includegraphics[height=0.5\textheight]{amplitude}
+				\caption {A visualization of Thomson Scattering from an electron.}
+			\end{figure}
+		\end{column}
+		
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\includegraphics[height=0.5\textheight]{phase}
+				\caption {A visualzation of Thomson scattering from an electron over space.}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+		
+\begin{frame}{Wave Interference}
+	\begin{figure}
+		\includegraphics[height= 0.7\textheight]{pond_wave_interference}
+												
+		\caption {Destructive Interference Occuring Between two Waves in a Pond}
+	\end{figure}				
+\end{frame}
+
+\begin{frame}{Wave interference}
+	When two waves meet, interference occurs.
+	\begin{itemize}
+		\item This interference is just the sum of the two waves.
+	\end{itemize}
+							
+								
+	\begin{columns}[c]	
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\includegraphics[height=0.55\textheight]{pi_shifted_matplotlib}
+				\caption{Destructive Interference Between Two Sinesoids}
+			\end{figure}
+		\end{column}
+											
+										
+											
+		\begin{column}{.5\textwidth}
+			\begin{figure}
+				\includegraphics[height=0.55\textheight]{in_phase_matplotlib}
+				\caption{Constructive Interference Between two Sinesoids}
+			\end{figure}
+		\end{column}
+	\end{columns}
+							
+\end{frame}
+
+\begin{frame}{Bragg's Law}
+	Bragg's Law allows us to deduce the angle at which a beam of light needs to strike the surface of a crystall latice, in order to produce constructive interference.
+	\begin{columns}
+		\begin{column}{.3\textwidth}
+			\begin{figure}
+			$$ n \lambda = 2d sin \theta$$
+			\caption{An equation modeling braggs law}
+			\end{figure}
+			
+			\begin{tiny}
+				\begin{itemize}
+					\item $n$ can be any integer
+					\item $\lambda$ is the wavelength of the incident light
+					\item $\theta$ is the angle at which the incident light strikes the lattice 
+				\end{itemize}
+			\end{tiny}
+		\end{column}
+		
+	\begin{column}{.7\textwidth}
+	\begin{figure}
+		\includegraphics[height=0.6\textheight]{braggs}
+		\caption{A diagram of }
+	\end{figure}
+	\end{column}
+	
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Simulating Diffraction Across a Lattice}
+	To simulate this diffraction across a lattice, you simply compute the scattering for each atom at your observation point, and then find the sum.
+	
+	\begin{figure}
+		\includegraphics[height=0.6\textheight]{lattice_simulation_points}
+		\caption{The points used in the simulations of diffraction from a lattice}
+	\end{figure}
+	
+\end{frame}
+
+\begin{frame}{Successfull Results}
+	Plots demonstrating Bragg's law were successfully created through the simulation	
+	\begin{columns}
+	\begin{column}{.5\textwidth}
+	\begin{figure}
+		\includegraphics[height=0.6\textheight]{constructive_atoms}
+		\caption{A plot of an observation plane likely experiencing positive interference from braggs diffraction.}
+	\end{figure}
+	\end{column}
+	
+	\begin{column}{.5\textwidth}
+		\begin{figure}
+			\includegraphics[height=0.6\textheight]{nonconstructive_atoms_wavelength}
+			\caption{A plot of an observation plane not experiencing positivie interference from Bragg's diffraction, as it's wavelength does not satisfy Bragg's law.}
+		\end{figure}
+	\end{column}
+	\end{columns}
+	
+\end{frame}
+
+\begin{frame}{Unsuccessfull Results}
+	Certain plots did not successfully desmonstrate Bragg's Law, even though they theoerically should have.
+	\begin{figure}
+		\includegraphics[height=0.35\textwidth]{nonconstructive_viewpoint_4cm}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Insights}
+	The main takeaway from this simulation is that Bragg's law is simply the summation of Thomson scattering.
+	\begin{itemize}
+		\item This is shown by observing Bragg's Law, simply by implementing Thomson scattering from a crystal lattice.
+	\end{itemize}
+	
+	Even though Bragg's Law could be shown more perfectly this type of simulation, it is certainly not easy.
+		\begin{itemize}
+			\item To get a truly accurate view of Bragg's Law simply from a simulation of scattering, the simulation would have to have very little error.
+		\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+	\frametitle<presentation>{Bibliography}
+	
+	\begin{thebibliography}{10}
+	
+	\beamertemplatebookbibitems
+	
+	\bibitem{*}
+		\newblock Elements of Modern X-Ray Physics
+		\newblock {\em Jens Als-Nielsen, 2001}
+		
+	\bibitem{*}
+		\newblock X-Ray Diffraction
+		\newblock {\em B.E Warren, 1990}
+	
+	\end{thebibliography}
+\end{frame}
 
 \end{document}
