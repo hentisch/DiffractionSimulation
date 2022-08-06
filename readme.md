@@ -35,5 +35,6 @@ while in the directory you cloned earlier.
 ## Materials:
 If you would like to learn more about the phenomena shown in this simulation, you can take a look at the [chapter I wrote in Mark Galassi's Serious Programming Courses book](https://markgalassi.codeberg.page/small-courses-html/). There is also a slideshow in the materials directory, however it is much less pedagogically effective without a presenter.
 
+To build this slideshow from it's LaTeX source, first run generate_plots_new.py to generate the plots and download the images which will be used.
 ## Contributing:
 If there is a bug or inaccuracy you would like to fix, feel free to send a pull request. For larger contributions, it is a good idea to create a new issue to discuss the changes you would like to make before you spend a lot of time implementing them.
