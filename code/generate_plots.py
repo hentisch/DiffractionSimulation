@@ -5,6 +5,8 @@ from wave_interference import ComponentWave, WavePlot
 import numpy as np
 import matplotlib.pyplot as plt
 
+from diffraction_plot import DiffractionPlot
+
 import diffraction_plot
 def download_photo_51():
     subprocess.run(["wget", "https://upload.wikimedia.org/wikipedia/en/b/b2/Photo_51_x-ray_diffraction_image.jpg", "-O", "../materials/slideshow/images/photo_51.png"])
