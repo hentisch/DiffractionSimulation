@@ -33,7 +33,6 @@ python3 script.py
 , though replace script.py with the name of the script you would like to run. Make sure to run this command while in the code directory.
 
 ## Materials:
-If you would like to learn more about the phenomena shown in this simulation, you can take a look at the [chapter I wrote in Mark Galassi's Serious Programming Courses book](https://markgalassi.codeberg.page/small-courses-html/). There is also a slideshow in the materials directory, however it is much less pedagogically effective without a presenter.
 
 To build this slideshow from it's LaTeX source, first run generate_plots_new.py to generate the plots and download the images which will be used.
 ## Contributing:
